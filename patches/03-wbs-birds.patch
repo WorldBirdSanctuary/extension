@@ -1,0 +1,533 @@
+diff --git a/.env.development.sample b/.env.development.sample
+index 5aedd79..84d606e 100644
+--- a/.env.development.sample
++++ b/.env.development.sample
+@@ -1,3 +1,3 @@
+-REACT_APP_TEST_CHANNEL_NAMES=abdullahmorrison
+-REACT_APP_CHAT_COMMANDS_PRIVILEGED_USERS=abdullahmorrison
+-REACT_APP_API_BASE_URL=http://localhost:3000
++REACT_APP_TEST_CHANNEL_NAMES=mattipv4
++REACT_APP_CHAT_COMMANDS_PRIVILEGED_USERS=mattipv4
++REACT_APP_API_BASE_URL=
+diff --git a/.env.sample b/.env.sample
+index 34ac0ca..fdf1b70 100644
+--- a/.env.sample
++++ b/.env.sample
+@@ -1,5 +1,5 @@
+-REACT_APP_CHAT_COMMANDS_PRIVILEGED_USERS=abdullahmorrison,mattipv4,pjeweb,alveusgg,spacevoyage
+-REACT_APP_DEFAULT_CHANNEL_NAMES=maya,alveussanctuary
+-REACT_APP_EXTRA_CHANNEL_NAMES=alveusgg
+-REACT_APP_API_BASE_URL=https://ext.alveussanctuary.org
++REACT_APP_CHAT_COMMANDS_PRIVILEGED_USERS=mattipv4
++REACT_APP_DEFAULT_CHANNEL_NAMES=worldbirdsanctuary
++REACT_APP_EXTRA_CHANNEL_NAMES=
++REACT_APP_API_BASE_URL=https://worldbirdsanctuary.github.io/extension
+ REACT_APP_TIMEZONE=America/Chicago
+diff --git a/src/components/AmbassadorCard.tsx b/src/components/AmbassadorCard.tsx
+index 4b137f1..4adddef 100644
+--- a/src/components/AmbassadorCard.tsx
++++ b/src/components/AmbassadorCard.tsx
+@@ -4,7 +4,6 @@ import Confetti from "react-canvas-confetti";
+ 
+ import { calculateAge, formatDate, isBirthday } from "../utils/dateManager";
+ import { useAmbassador } from "../hooks/useAmbassadors";
+-import { camelToKebab } from "../utils/helpers";
+ import { classes } from "../utils/classes";
+ 
+ import IconInfo from "./icons/IconInfo";
+@@ -17,14 +16,11 @@ import Ring from "./Ring";
+ import moderatorBadge from "../assets/mod.svg";
+ import partyHat from "../assets/party.svg";
+ import TiltCard from "./TiltCard";
++import { getIUCNStatus } from "@alveusgg/data/build/iucn";
+ 
+ const headingClass = "text-base text-wbs-blue-400";
+ const rowClass = "flex flex-wrap gap-x-6 gap-y-1 [&>*]:mr-auto";
+ 
+-const stringifyLifespan = (value: number | { min: number; max: number }) => {
+-  return typeof value === "number" ? `${value}` : `${value.min}-${value.max}`;
+-};
+-
+ export interface AmbassadorCardProps {
+   ambassador: string;
+   onClose?: () => void;
+@@ -51,6 +47,9 @@ export default function AmbassadorCard(props: AmbassadorCardProps) {
+   const birthday = ambassador?.birth && isBirthday(ambassador.birth);
+   const age = ambassador?.birth ? calculateAge(ambassador.birth) : "Unknown";
+   const birth = ambassador?.birth ? formatDate(ambassador.birth) : "Unknown";
++  const arrival = ambassador?.arrival
++    ? formatDate(ambassador.arrival)
++    : "Unknown";
+ 
+   const internalRef = useRef<HTMLDivElement>(null);
+   const callbackRef = useCallback(
+@@ -183,52 +182,30 @@ export default function AmbassadorCard(props: AmbassadorCardProps) {
+ 
+           <div>
+             <h3 className={headingClass}>Species</h3>
+-            <p>{ambassador.species.name}</p>
+             <p>
+-              <i>{ambassador.species.scientificName}</i>{" "}
+-              <span className="text-wbs-blue-200">
+-                ({ambassador.species.class.title})
+-              </span>
++              <i>
++                {ambassador.species.name}{" "}
++                <span className="text-wbs-blue-200">
++                  ({ambassador.species.scientificName})
++                </span>
++              </i>
+             </p>
++            <p>{ambassador.species.description}</p>
+           </div>
+ 
+-          <div className={rowClass}>
+-            <div>
+-              <h3 className={headingClass}>Sex</h3>
+-              <p>{ambassador.sex || "Unknown"}</p>
+-            </div>
+-            <div>
+-              <h3 className={headingClass}>Age</h3>
+-              <p>
+-                {age[0] === "~" && (
+-                  <span className="text-base leading-none" title="Approx.">
+-                    ~
+-                  </span>
+-                )}
+-                {age.slice(age[0] === "~" ? 1 : 0)}
+-              </p>
+-            </div>
+-            <div>
+-              <h3 className={headingClass}>Birthday</h3>
+-              <p>
+-                {birth[0] === "~" && (
+-                  <span className="text-base leading-none" title="Approx.">
+-                    ~
+-                  </span>
+-                )}
+-                {birth.slice(birth[0] === "~" ? 1 : 0)}
+-              </p>
+-            </div>
++          <div>
++            <h3 className={headingClass}>Range</h3>
++            <p>{ambassador.species.range}</p>
+           </div>
+ 
+           <div>
+-            <h3 className={headingClass}>Story</h3>
+-            <p>{ambassador.story}</p>
++            <h3 className={headingClass}>Habitat</h3>
++            <p>{ambassador.species.habitat}</p>
+           </div>
+ 
+           <div>
+-            <h3 className={headingClass}>Conservation Mission</h3>
+-            <p>{ambassador.mission}</p>
++            <h3 className={headingClass}>Diet</h3>
++            <p>{ambassador.species.diet}</p>
+           </div>
+ 
+           <div>
+@@ -256,96 +233,66 @@ export default function AmbassadorCard(props: AmbassadorCardProps) {
+                   className="text-nowrap text-wbs-blue-200 transition-colors hover:text-highlight focus:text-highlight"
+                 >
+                   <span className="underline">
+-                    {ambassador.species.iucn.title}
++                    {getIUCNStatus(ambassador.species.iucn.status)}
+                   </span>{" "}
+                   <IconExternal className="mb-0.5 inline-block" size={12} />
+                 </a>
+               ) : (
+-                ambassador.species.iucn.title
++                getIUCNStatus(ambassador.species.iucn.status)
+               )}
+             </p>
+           </div>
+ 
+-          <div>
+-            <h3 className={headingClass}>Native To</h3>
+-            <p>{ambassador.species.native.text}</p>
+-          </div>
+-
+-          <div>
+-            <h3 className={headingClass}>Species Lifespan</h3>
+-            <p>
+-              Wild:{" "}
+-              {"wild" in ambassador.species.lifespan &&
+-              ambassador.species.lifespan.wild !== undefined ? (
+-                <>
++          <div className={rowClass}>
++            <div>
++              <h3 className={headingClass}>Sex</h3>
++              <p>{ambassador.sex || "Unknown"}</p>
++            </div>
++            <div>
++              <h3 className={headingClass}>Age</h3>
++              <p>
++                {age[0] === "~" && (
+                   <span className="text-base leading-none" title="Approx.">
+                     ~
+                   </span>
+-                  {stringifyLifespan(ambassador.species.lifespan.wild)} years
+-                </>
+-              ) : (
+-                "Unknown"
+-              )}
+-            </p>
+-            <p>
+-              Captivity:{" "}
+-              {"captivity" in ambassador.species.lifespan &&
+-              ambassador.species.lifespan.captivity !== undefined ? (
+-                <>
++                )}
++                {age.slice(age[0] === "~" ? 1 : 0)}
++              </p>
++            </div>
++            <div>
++              <h3 className={headingClass}>Hatched</h3>
++              <p>
++                {birth[0] === "~" && (
+                   <span className="text-base leading-none" title="Approx.">
+                     ~
+                   </span>
+-                  {stringifyLifespan(ambassador.species.lifespan.captivity)}{" "}
+-                  years
+-                </>
+-              ) : (
+-                "Unknown"
+-              )}
+-            </p>
++                )}
++                {birth.slice(birth[0] === "~" ? 1 : 0)}
++              </p>
++            </div>
+           </div>
+ 
+           <div className={rowClass}>
+             <div>
+-              <h3 className={headingClass}>Enclosure</h3>
++              <h3 className={headingClass}>Arrival</h3>
+               <p>
+-                <a
+-                  href={`https://www.alveussanctuary.org/ambassadors#enclosures:${camelToKebab(ambassador.enclosure.key)}`}
+-                  rel="noreferrer"
+-                  target="_blank"
+-                  className="text-nowrap text-wbs-blue-200 transition-colors hover:text-highlight focus:text-highlight"
+-                >
+-                  <span className="underline">
+-                    {ambassador.enclosure.title}
+-                  </span>{" "}
+-                  <IconExternal className="mb-0.5 inline-block" size={12} />
+-                </a>
++                {arrival[0] === "~" && (
++                  <span className="text-base leading-none" title="Approx.">
++                    ~
++                  </span>
++                )}
++                {arrival.slice(arrival[0] === "~" ? 1 : 0)}
+               </p>
+             </div>
+             <div>
+-              <h3 className={headingClass}>Arrived at Alveus</h3>
+-              <p>
+-                {ambassador.arrival
+-                  ? formatDate(ambassador.arrival, false)
+-                  : "Unknown"}
+-              </p>
++              <h3 className={headingClass}>Reason</h3>
++              <p>{ambassador.reason}</p>
+             </div>
+           </div>
+ 
+-          <div className="mt-3 italic">
+-            <p>
+-              Learn more about {ambassador.name} on the{" "}
+-              <a
+-                href={`https://www.alveussanctuary.org/ambassadors/${camelToKebab(
+-                  ambassadorKey,
+-                )}`}
+-                rel="noreferrer"
+-                target="_blank"
+-                className="text-nowrap text-wbs-blue-200 transition-colors hover:text-highlight focus:text-highlight"
+-              >
+-                <span className="underline">Alveus Sanctuary website</span>{" "}
+-                <IconExternal className="mb-0.5 inline-block" size={12} />
+-              </a>
+-            </p>
++          <div>
++            <h3 className={headingClass}>Story</h3>
++            <p>{ambassador.story}</p>
+           </div>
+         </div>
+ 
+diff --git a/src/hooks/useAmbassadors.tsx b/src/hooks/useAmbassadors.tsx
+index 5dce32e..38d910c 100644
+--- a/src/hooks/useAmbassadors.tsx
++++ b/src/hooks/useAmbassadors.tsx
+@@ -3,59 +3,17 @@ import {
+   useCallback,
+   useContext,
+   useEffect,
+-  useMemo,
+   useState,
+ } from "react";
+ import { z } from "zod";
+ 
+-import allAmbassadors, {
+-  ambassadorSchema,
+-} from "@alveusgg/data/build/ambassadors/core";
+-import { isActiveAmbassadorEntry } from "@alveusgg/data/build/ambassadors/filters";
+-import { getClassification } from "@alveusgg/data/build/ambassadors/classification";
+-import {
+-  getAmbassadorImages,
+-  ambassadorImageSchema,
+-} from "@alveusgg/data/build/ambassadors/images";
+-import { getIUCNStatus } from "@alveusgg/data/build/iucn";
+-import {
+-  getSpecies,
+-  speciesSchema,
+-} from "@alveusgg/data/build/ambassadors/species";
+-import enclosures from "@alveusgg/data/build/enclosures";
++import { typeSafeObjectFromEntries } from "../utils/helpers";
+ 
+ import {
+-  typeSafeObjectEntries,
+-  typeSafeObjectFromEntries,
+-} from "../utils/helpers";
+-import { getToday } from "../utils/dateManager";
+-
+-import winstonImage from "../assets/winston.png";
+-
+-// These schema should match the type exposed by the API
+-const apiAmbassadorSchema = ambassadorSchema.extend({
+-  image: ambassadorImageSchema.extend({
+-    src: z.string().url(),
+-  }),
+-  species: speciesSchema.extend({
+-    key: z.string(),
+-    iucn: speciesSchema.shape.iucn.and(
+-      z.object({
+-        title: z.string(),
+-      }),
+-    ),
+-    class: z.object({
+-      key: z.string(),
+-      title: z.string(),
+-    }),
+-  }),
+-  enclosure: z.object({
+-    key: z.string(),
+-    title: z.string(),
+-  }),
+-});
+-
+-type Ambassador = z.infer<typeof apiAmbassadorSchema>;
++  birds as fallbackAmbassadors,
++  birdSchema as apiAmbassadorSchema,
++  type Bird as Ambassador,
++} from "../data/birds";
+ 
+ // Use transform here so we parse each ambassador individually
+ const apiSchema = z.object({
+@@ -86,12 +44,12 @@ const apiSchema = z.object({
+     }),
+ });
+ 
+-const apiBaseUrl = process.env.REACT_APP_API_BASE_URL?.replace(/\/+$/, "");
+-if (!apiBaseUrl)
+-  throw new Error("REACT_APP_API_BASE_URL environment variable is not set");
+-
+ const fetchAmbassadors = async (): Promise<Record<string, Ambassador>> => {
+-  const response = await fetch(`${apiBaseUrl}/api/stream/ambassadors`);
++  const apiBaseUrl = process.env.REACT_APP_API_BASE_URL?.replace(/\/+$/, "");
++  if (!apiBaseUrl)
++    throw new Error("REACT_APP_API_BASE_URL environment variable is not set");
++
++  const response = await fetch(`${apiBaseUrl}/static/birds.json`);
+   if (!response.ok)
+     throw new Error(
+       `Failed to fetch ambassadors: ${response.status} ${response.statusText} ${await response.text()}`,
+@@ -101,40 +59,6 @@ const fetchAmbassadors = async (): Promise<Record<string, Ambassador>> => {
+   return apiSchema.parse(data).v3;
+ };
+ 
+-const fallbackAmbassadors: Record<string, Ambassador> =
+-  typeSafeObjectFromEntries(
+-    typeSafeObjectEntries(allAmbassadors)
+-      .filter(isActiveAmbassadorEntry)
+-      .map<[string, Ambassador]>(([key, val]) => {
+-        const image = getAmbassadorImages(key)[0];
+-        const species = getSpecies(val.species);
+-
+-        return [
+-          key,
+-          {
+-            ...val,
+-            image,
+-            species: {
+-              ...species,
+-              key: val.species,
+-              iucn: {
+-                ...species.iucn,
+-                title: getIUCNStatus(species.iucn.status),
+-              },
+-              class: {
+-                key: species.class,
+-                title: getClassification(species.class),
+-              },
+-            },
+-            enclosure: {
+-              key: val.enclosure,
+-              title: enclosures[val.enclosure].name,
+-            },
+-          },
+-        ];
+-      }),
+-  );
+-
+ // Use a context to fetch the ambassadors from the API
+ const Context = createContext<{
+   ambassadors: Record<string, Ambassador> | null;
+@@ -191,81 +115,9 @@ export const AmbassadorsProvider = ({
+   );
+ };
+ 
+-const winston = {
+-  name: "Winston",
+-  alternate: [],
+-  commands: ["winston"],
+-  species: {
+-    key: "polarBear",
+-    name: "Polar Bear",
+-    scientificName: "Twitchus memeticus",
+-    iucn: {
+-      id: null,
+-      assessment: null,
+-      title: getIUCNStatus("NE"),
+-      status: "NE",
+-    },
+-    native: {
+-      text: "Twitch chat (including the Animals, Aquariums, & Zoos category), miscellaneous emote services",
+-      source:
+-        "https://clips.twitch.tv/TangibleFurryTortoiseBCWarrior-izyQ3nOgq1pYe1rc", // https://clips.twitch.tv/CleverSecretiveAntChocolateRain--zjm5eRw6zxG75Up
+-    },
+-    lifespan: {
+-      source: "",
+-    },
+-    birth: "live",
+-    class: {
+-      key: "mammalia",
+-      title: getClassification("mammalia"),
+-    },
+-  },
+-  sex: "Male",
+-  birth: "2020-04-01",
+-  arrival: "2022-12-01",
+-  retired: null,
+-  enclosure: {
+-    key: "ice",
+-    title: "Ice Pool",
+-  },
+-  story:
+-    "Winston was rescued by the Ontario Zoo in Canada after it was noticed that he was watching streams too often and not touching grass. Originally on loan to Alveus for two years, he is now a permanent resident of Texas.",
+-  mission:
+-    "He is an ambassador for stream-life balance and encouraging all chatters to step away from their devices more often.",
+-  clips: [],
+-  homepage: null,
+-  plush: null,
+-  image: {
+-    src: winstonImage,
+-    alt: "Winston the polar bear",
+-    position: "50% 25%",
+-  },
+-} as const satisfies Ambassador;
+-
+-const isWinstonDate = (date: string) => date === "04-01";
+-
+ export const useAmbassadors = (): Record<string, Ambassador> | null => {
+   const context = useContext(Context);
+-
+-  // Setup a timer to store the current month and day
+-  const [date, setDate] = useState<string>("");
+-  useEffect(() => {
+-    const updateDate = () => setDate(getToday().toFormat("MM-dd"));
+-    updateDate();
+-    const interval = setInterval(updateDate, 60 * 1000);
+-    return () => clearInterval(interval);
+-  }, []);
+-
+-  // Return the ambassadors, with Winston added to the start if it's April 1st
+-  return useMemo(
+-    () =>
+-      context?.ambassadors
+-        ? {
+-            ...context?.ambassadors,
+-            ...(isWinstonDate(date) ? { winston } : {}),
+-          }
+-        : null,
+-    [context?.ambassadors, date],
+-  );
++  return context?.ambassadors ?? null;
+ };
+ 
+ export const useAmbassador = (key: string) => {
+diff --git a/webpack.config.ts b/webpack.config.ts
+index 8989b1d..de77753 100644
+--- a/webpack.config.ts
++++ b/webpack.config.ts
+@@ -1,4 +1,4 @@
+-import { basename, dirname, join } from "path";
++import { join } from "path";
+ 
+ import HtmlWebpackPlugin from "html-webpack-plugin";
+ import CopyWebpackPlugin from "copy-webpack-plugin";
+@@ -231,34 +231,14 @@ const config: webpack.Configuration = {
+       },
+       // Load images
+       {
+-        test: /\.(png|jpe?g|gif|svg)$/i,
+-        exclude: /node_modules/,
+-        type: "asset",
+-      },
+-      // Load ambassador images in @alveusgg packages
+-      {
+-        test: /\.(png|jpe?g)$/,
++        test: /\.(png|jpe?g)$/i,
+         include: [
+-          new RegExp(
+-            join(
+-              "node_modules",
+-              "@alveusgg",
+-              "data",
+-              "build",
+-              "assets",
+-              "ambassadors",
+-            ).replace(/\\/g, "\\\\"),
+-          ),
+-          new RegExp(join("src", "assets", "winston").replace(/\\/g, "\\\\")),
++          new RegExp(join("src", "assets", "birds").replace(/\\/g, "\\\\")),
+         ],
+         type: "asset",
+         generator: {
+-          filename: (pathData) => {
+-            if (!pathData.filename) return "";
+-            const dir = basename(dirname(pathData.filename));
+-            return `static/media/ambassadors/${dir}/[name].[contenthash][ext]`;
+-          },
+-        } as webpack.WebpackOptionsNormalized["module"]["generator"]["asset"],
++          filename: "static/media/birds/[name].[contenthash][ext]",
++        },
+         use: [
+           {
+             loader: "webpack-image-resize-loader",
+@@ -268,6 +248,10 @@ const config: webpack.Configuration = {
+           },
+         ],
+       },
++      {
++        test: /\.(png|jpe?g|gif|svg)$/i,
++        type: "asset",
++      },
+     ],
+   },
+   resolve: {
