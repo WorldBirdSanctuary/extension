@@ -1,0 +1,458 @@
+diff --git a/README.md b/README.md
+index ee13226..08fa1c8 100644
+--- a/README.md
++++ b/README.md
+@@ -1,20 +1,10 @@
+-# The Alveus Twitch Extension
++# World Bird Sanctuary Twitch Extension
+ 
+-Twitch extension for [Alveus Sanctuary](https://www.alveussanctuary.org), allowing stream viewers to learn more about the ambassadors at the sanctuary.
++Twitch extension for [World Bird Sanctuary](https://www.worldbirdsanctuary.org), allowing stream viewers to learn more about the birds at the sanctuary.
+ 
+-## Demo
++This extension is directly based on the work of the Alveus.gg team and their [Alveus Sanctuary Twitch Extension](https://github.com/alveusgg/extension), with a set of changes applied to customize it for World Bird Sanctuary.
+ 
+-### Overlay
+-
+-https://user-images.githubusercontent.com/49528805/229294979-1cf91fc2-420a-43ec-95c4-78c06d4ec99d.mp4
+-
+-### Panel
+-
+-https://user-images.githubusercontent.com/49528805/229295136-675313d2-54e4-4758-a42c-76961c4d2e66.mp4
+-
+-### Mobile
+-
+-https://user-images.githubusercontent.com/49528805/229295376-6490d0a5-5f01-456b-8509-6e551ce82f1c.mp4
++Refer to the [README.md](https://github.com/worldbirdsanctuary/extension/blob/patches/README.md) in the `patches` branch to understand how the changes are applied to this branch.
+ 
+ ## Local Set Up
+ 
+@@ -79,31 +69,23 @@ The panel is available at [localhost:8080/panel.html](https://localhost:8080/pan
+ 
+ ## Chatbot Commands
+ 
+-`![ambassador]`: displays the card of the corresponding ambassador
++`![bird]`: displays the card of the corresponding bird
+ 
+-- Note: `[ambassador]` is the first name of any ambassador (Ex: !nilla = Nilla Wafer, !snork = Snork)
++- Note: `[bird]` is the first name of any bird (Ex: !sayyida = Sayyida)
+ 
+-`!welcome`: displays the Alveus introduction section
++`!welcome`: displays the WBS introduction section
+ 
+-`!refresh`: updates the overlay and panel with the latest ambassador data
++`!refresh`: updates the overlay and panel with the latest bird data
+ 
+ - Note: Only `REACT_APP_CHAT_COMMANDS_PRIVILEGED_USERS` have permission to run this command
+ 
+ ## Contribute
+ 
+-Contributions are always welcome! If you have any ideas, suggestions, fixes, feel free to contribute. Make sure to discuss what you plan to work on either as an issue or in the discussion page. You can also throw in any ideas at all in the discussion page. You can contribute to the codebase by going through the following steps:
+-
+-1. Fork this repo
+-2. Create a branch: `git checkout -b youruserame/your-feature`
+-3. Make some changes
+-4. Test your changes
+-5. Push your branch and open a Pull Request
+-
+-<b>\*Note:</b> All contributions must be possible for all displays (Overlay & Panel) and responsive to their different sizes (including mobile).
++Refer to the [README.md](https://github.com/worldbirdsanctuary/extension/blob/patches/README.md) in the `patches` branch to understand how to contribute changes to this extension.
+ 
+ ## User Data
+ 
+-When using the extension, the extension will create an anonymous connection to the current Twitch channel's chat, as well as a few other Alveus-related Twitch channels. This is to allow the extension to listen for commands run by moderators to trigger popups in the overlay. The extension does not store any messages from chat.
++When using the extension, the extension will create an anonymous connection to the current Twitch channel's chat. This is to allow the extension to listen for commands run by moderators to trigger popups in the overlay. The extension does not store any messages from chat.
+ 
+ When using the extension, it will create a local storage entry in your browser to store the last section of the overlay that you accessed, and any preferences you set (such as disabling the mod-triggered popups). This is to allow the extension to remember your preferences between sessions. The data stored in local storage is not shared with anyone and does not include any personal information.
+ 
+diff --git a/RELEASE.md b/RELEASE.md
+index 14996d2..f6340fb 100644
+--- a/RELEASE.md
++++ b/RELEASE.md
+@@ -8,7 +8,7 @@ All new versions start in local test where the base URI is `https://localhost:80
+ 
+ The "panel viewer path" should be `panel.html`, the "mobile viewer path" as `mobile.html`, and "video - fullscreen viewer path" as `video_overlay.html`.
+ 
+-Ensure that the allowlist for image domains is set to allow `https://www.alveussanctuary.org` for ambassador images, the allowlist for media domains is set to allow `https://fonts.googleapis.com/` for fonts, and that allowlist for URL fetching domains is set to include `wss://irc-ws.chat.twitch.tv:443`, `ws://irc-ws.chat.twitch.tv:80`, `irc://irc.chat.twitch.tv:6667`, `irc://irc.chat.twitch.tv:6697` to allow connecting to chat as well as `https://ext.alveussanctuary.org` to allow fetching ambassador data.
++Ensure that the allowlist for image domains is set to allow `https://worldbirdsanctuary.github.io` for bird images, the allowlist for media domains is set to allow `https://fonts.googleapis.com/` for fonts, and that allowlist for URL fetching domains is set to include `wss://irc-ws.chat.twitch.tv:443`, `ws://irc-ws.chat.twitch.tv:80`, `irc://irc.chat.twitch.tv:6667`, `irc://irc.chat.twitch.tv:6697` to allow connecting to chat as well as `https://worldbirdsanctuary.github.io` to allow fetching bird data.
+ 
+ ## Hosted test
+ 
+@@ -26,15 +26,11 @@ Include the walkthrough guide for the extension, with an updated changelog of wh
+ <summary>Walkthrough guide and changelog template</summary>
+ 
+ ```text
+-Note: "ambassadors" are the animals displayed in the extension (they are educational ambassadors for their species).
+-
+-This extension displays information about ambassadors at Alveus Sanctuary within the Panel and Overlay view.
+-It is designed to be used by channels that are hosting collaboration streams at Alveus.
+-It allows viewers to explore more information about the ambassadors seen on the stream, at any time.
+-It allows the broadcaster/moderators to run chat commands to display information about specific ambassadors to everyone, as they are shown on stream.
++This extension displays information about birds at World Bird Sanctuary (WBS) within the Panel and Overlay view.
++It allows viewers to explore more information about the birds seen on the stream, at any time.
++It allows the broadcaster/moderators to run chat commands to display information about specific birds to everyone, as they are shown on stream.
+ 
+ This extension is made with React, and is bundled with Webpack.
+-Due to the nature (frequency and last-minute-ness) of collaboration streams, it is not tenable to maintain an access list and create new releases for each collaboration, so this is published as a global overlay.
+ 
+ Changelog:
+ 
+@@ -42,32 +38,29 @@ Changelog:
+ 
+ Source code diff:
+ 
+-    https://github.com/alveusgg/extension/compare/v<previous version here>...v<new version here>
++    https://github.com/worldbirdsanctuary/extension/compare/v<previous version here>...v<new version here>
+ 
+ External links:
+ 
+-    All links are related to Alveus Sanctuary, and can be found in the ambassador cards as well as the overlay welcome card.
++    All links are related to World Bird Sanctuary, and can be found in the bird cards as well as the overlay welcome card.
+ 
+-    - Alveus Sanctuary website (homepage + ambassador pages)
+-    - Alveus Amazon Wishlist
+-    - Alveus Instagram
+-    - Alveus TikTok
+-    - Alveus X/Twitter
+-    - Alveus Bluesky
+-    - Alveus Facebook
++    - World Bird Sanctuary website (homepage + bird pages)
++    - WBS Amazon Wishlist
++    - WBS Instagram
++    - WBS TikTok
++    - WBS Facebook
+     - Extension GitHub (Open-source code for the extension, encouraging users to contribute to and improve the extension)
+ 
+ Allowlist explanations:
+ 
+     - `https://fonts.googleapis.com/` Google Fonts, for loading fonts in the extension
+     - `wss://irc-ws.chat.twitch.tv:443`, `ws://irc-ws.chat.twitch.tv:80`, `irc://irc.chat.twitch.tv:6667`, `irc://irc.chat.twitch.tv:6697` Twitch chat URLs, for the chatbot to connect to
+-    - `https://www.alveussanctuary.org` Alveus Sanctuary website, for fetching ambassador images
+-    - `https://ext.alveussanctuary.org` Alveus Sanctuary website (cached API), for fetching ambassador data
++    - `https://worldbirdsanctuary.github.io` WBS extension deployment, for fetching bird data and images
+ 
+ Testing the Extension:
+ 
+     - For overlay, mobile + panel: Click the buttons to explore the extension
+-    - For overlay: As a moderator or broadcaster, type `!welcome` in chat to trigger the welcome card, type `!snork` to trigger an ambassador card
++    - For overlay: As a moderator or broadcaster, type `!welcome` in chat to trigger the welcome card, type `!sayyida` to trigger a bird card
+ ```
+ 
+ </details>
+diff --git a/package.json b/package.json
+index ff63be7..0d74893 100644
+--- a/package.json
++++ b/package.json
+@@ -1,15 +1,15 @@
+ {
+-  "name": "@alveusgg/extension",
++  "name": "@worldbirdsanctuary/extension",
+   "version": "0.1.0",
+   "private": true,
+   "license": "SEE LICENSE IN LICENSE.md",
+   "type": "module",
+   "repository": {
+     "type": "git",
+-    "url": "git+https://github.com/alveusgg/extension.git"
++    "url": "git+https://github.com/worldbirdsanctuary/extension.git"
+   },
+   "bugs": {
+-    "url": "https://github.com/alveusgg/extension/issues"
++    "url": "https://github.com/worldbirdsanctuary/extension/issues"
+   },
+   "engines": {
+     "node": "22.x",
+diff --git a/public/index.html b/public/index.html
+index 4618004..8faf64b 100644
+--- a/public/index.html
++++ b/public/index.html
+@@ -5,7 +5,7 @@
+     <meta name="viewport" content="width=device-width, initial-scale=1" />
+     <meta name="theme-color" content="#000000" />
+     <link rel="manifest" href="./manifest.json" />
+-    <title>Alveus Ambassadors</title>
++    <title>World Bird Sanctuary Birds</title>
+   </head>
+   <body>
+     <script src="https://extension-files.twitch.tv/helper/v1/twitch-ext.min.js"></script>
+diff --git a/public/manifest.json b/public/manifest.json
+index a17cc1a..ca4d34e 100644
+--- a/public/manifest.json
++++ b/public/manifest.json
+@@ -1,5 +1,5 @@
+ {
+-  "name": "Alveus Ambassadors",
++  "name": "World Bird Sanctuary Birds",
+   "start_url": ".",
+   "display": "standalone",
+   "theme_color": "#000000",
+diff --git a/src/components/Welcome.tsx b/src/components/Welcome.tsx
+index 3d2bbb2..63846f1 100644
+--- a/src/components/Welcome.tsx
++++ b/src/components/Welcome.tsx
+@@ -1,17 +1,10 @@
+-import { useMemo } from "react";
+-
+ import IconGlobe from "./icons/IconGlobe";
+ import IconAmazon from "./icons/IconAmazon";
+ import IconInstagram from "./icons/IconInstagram";
+ import IconTikTok from "./icons/IconTikTok";
+-import IconTwitter from "./icons/IconTwitter";
+-import IconBluesky from "./icons/IconBluesky";
+ import IconFacebook from "./icons/IconFacebook";
+-import IconPlay from "./icons/IconPlay";
+ import IconGitHub from "./icons/IconGitHub";
+ 
+-import useChannel from "../hooks/useChannel";
+-
+ import Card from "./Card";
+ 
+ const socialClass =
+@@ -24,25 +17,19 @@ interface WelcomeProps {
+ export default function Welcome(props: WelcomeProps) {
+   const { className } = props;
+ 
+-  const channel = useChannel();
+-  const nonDefault = useMemo(
+-    () => !channel || channel.toLowerCase() !== "alveussanctuary",
+-    [channel],
+-  );
+-
+   return (
+-    <Card className={className} title="Welcome to Alveus">
++    <Card className={className} title="Welcome to World Bird Sanctuary">
+       <p className="mt-2 mb-4">
+-        Alveus Sanctuary is a 501(c)(3) non-profit organization that functions
+-        as a wildlife sanctuary and as a virtual education center. These
+-        non-releasable animals are educational ambassadors so viewers can learn
+-        from and build a connection to them.
++        Nestled on 305 acres of serene Missouri hardwood forest, World Bird
++        Sanctuary is a destination for nature enthusiasts. We protect and
++        preserve birds and their habitats through conservation, rehabilitation,
++        and education.
+       </p>
+ 
+       <ul className="mb-2 flex flex-wrap items-center justify-center gap-4">
+         <li className={socialClass}>
+           <a
+-            href="https://www.alveussanctuary.org"
++            href="https://www.worldbirdsanctuary.org"
+             rel="noreferrer"
+             target="_blank"
+             title="Website"
+@@ -52,7 +39,7 @@ export default function Welcome(props: WelcomeProps) {
+         </li>
+         <li className={socialClass}>
+           <a
+-            href="https://www.alveussanctuary.org/wishlist"
++            href="https://www.amazon.com/hz/wishlist/ls/2X3ZNQ38V41RE"
+             rel="noreferrer"
+             target="_blank"
+             title="Amazon Wishlist"
+@@ -62,7 +49,7 @@ export default function Welcome(props: WelcomeProps) {
+         </li>
+         <li className={socialClass}>
+           <a
+-            href="https://www.alveussanctuary.org/instagram"
++            href="https://www.instagram.com/worldbirdsanctuary"
+             rel="noreferrer"
+             target="_blank"
+             title="Instagram"
+@@ -72,7 +59,7 @@ export default function Welcome(props: WelcomeProps) {
+         </li>
+         <li className={socialClass}>
+           <a
+-            href="https://www.alveussanctuary.org/tiktok"
++            href="https://www.tiktok.com/@worldbirdstl"
+             rel="noreferrer"
+             target="_blank"
+             title="TikTok"
+@@ -82,27 +69,7 @@ export default function Welcome(props: WelcomeProps) {
+         </li>
+         <li className={socialClass}>
+           <a
+-            href="https://www.alveussanctuary.org/twitter"
+-            rel="noreferrer"
+-            target="_blank"
+-            title="X (Twitter)"
+-          >
+-            <IconTwitter size={32} />
+-          </a>
+-        </li>
+-        <li className={socialClass}>
+-          <a
+-            href="https://www.alveussanctuary.org/bluesky"
+-            rel="noreferrer"
+-            target="_blank"
+-            title="Bluesky"
+-          >
+-            <IconBluesky size={32} />
+-          </a>
+-        </li>
+-        <li className={socialClass}>
+-          <a
+-            href="https://www.alveussanctuary.org/facebook"
++            href="https://www.facebook.com/WorldBirdSanctuary"
+             rel="noreferrer"
+             target="_blank"
+             title="Facebook"
+@@ -110,23 +77,11 @@ export default function Welcome(props: WelcomeProps) {
+             <IconFacebook size={32} />
+           </a>
+         </li>
+-        {nonDefault && (
+-          <li className={socialClass}>
+-            <a
+-              href="https://www.alveussanctuary.org/live"
+-              rel="noreferrer"
+-              target="_blank"
+-              title="Live"
+-            >
+-              <IconPlay size={32} />
+-            </a>
+-          </li>
+-        )}
+       </ul>
+ 
+       <a
+         className="flex w-fit items-center justify-center gap-1 text-xs transition-colors hover:text-highlight focus:text-highlight"
+-        href="https://github.com/alveusgg/extension"
++        href="https://github.com/worldbirdsanctuary/extension"
+         rel="noreferrer"
+         target="_blank"
+       >
+diff --git a/src/pages/overlay/components/overlay/Ambassadors.tsx b/src/pages/overlay/components/overlay/Ambassadors.tsx
+index 97763a8..2095419 100644
+--- a/src/pages/overlay/components/overlay/Ambassadors.tsx
++++ b/src/pages/overlay/components/overlay/Ambassadors.tsx
+@@ -29,28 +29,24 @@ const arrowPathClass =
+   "[&_path]:stroke-alveus-tan [&_path]:stroke-[0.25rem] [&_path]:[paint-order:stroke] [&_path]:transition-[stroke] [&_path]:group-hover:stroke-highlight [&_path]:group-hover:stroke-[0.375rem] [&_path]:group-focus:stroke-highlight [&_path]:group-focus:stroke-[0.375rem]";
+ const hiddenClass = "opacity-0 pointer-events-none";
+ 
+-type AmbassadorsProps = OverlayOptionProps & { plants?: boolean };
++type AmbassadorsProps = OverlayOptionProps;
+ 
+ export default function Ambassadors(props: AmbassadorsProps) {
+   const settings = useSettings();
+   const {
+     context: { activeAmbassador, setActiveAmbassador },
+     className,
+-    plants = false,
+   } = props;
+ 
+   const rawAmbassadors = useAmbassadors();
+   const ambassadors = useMemo(
+     () =>
+       sortAmbassadors(
+-        typeSafeObjectEntries(rawAmbassadors ?? {}).filter(
+-          ([, ambassador]) =>
+-            (ambassador.species.class.key === "plantae") === plants,
+-        ),
++        typeSafeObjectEntries(rawAmbassadors ?? {}),
+         settings.ambassadorSort.value,
+         sortPartialDates,
+       ),
+-    [rawAmbassadors, plants, settings.ambassadorSort.value],
++    [rawAmbassadors, settings.ambassadorSort.value],
+   );
+ 
+   const upArrowRef = useRef<HTMLButtonElement>(null);
+diff --git a/src/pages/overlay/components/overlay/Overlay.tsx b/src/pages/overlay/components/overlay/Overlay.tsx
+index 3808a2b..bc262fe 100644
+--- a/src/pages/overlay/components/overlay/Overlay.tsx
++++ b/src/pages/overlay/components/overlay/Overlay.tsx
+@@ -12,7 +12,6 @@ import {
+ import Welcome from "../../../../components/Welcome";
+ import IconWelcome from "../../../../components/icons/IconWelcome";
+ import IconAmbassadors from "../../../../components/icons/IconAmbassadors";
+-import IconPlant from "../../../../components/icons/IconPlant";
+ import IconSettings from "../../../../components/icons/IconSettings";
+ 
+ import {
+@@ -47,7 +46,7 @@ const overlayOptions = [
+     key: "welcome",
+     type: "primary",
+     icon: IconWelcome,
+-    title: "Welcome to Alveus",
++    title: "Welcome to World Bird Sanctuary",
+     component: (props) => (
+       <Welcome
+         {...props}
+@@ -59,23 +58,8 @@ const overlayOptions = [
+     key: "ambassadors",
+     type: "primary",
+     icon: IconAmbassadors,
+-    title: "Explore our Animal Ambassadors",
++    title: "Meet our Birds",
+     component: AmbassadorsOverlay,
+-    condition: ({ ambassadors }) =>
+-      Object.values(ambassadors ?? {}).some(
+-        (a) => a.species.class.key !== "plantae",
+-      ),
+-  },
+-  {
+-    key: "ambassadorPlants",
+-    type: "primary",
+-    icon: IconPlant,
+-    title: "Explore our Plant Ambassadors",
+-    component: (props) => <AmbassadorsOverlay {...props} plants />,
+-    condition: ({ ambassadors }) =>
+-      Object.values(ambassadors ?? {}).some(
+-        (a) => a.species.class.key === "plantae",
+-      ),
+   },
+   {
+     key: "settings",
+@@ -166,13 +150,7 @@ export default function Overlay() {
+           else if (command !== "welcome") return;
+ 
+           // Show the card
+-          setVisibleOption(
+-            ambassador
+-              ? ambassador.species.class.key === "plantae"
+-                ? "ambassadorPlants"
+-                : "ambassadors"
+-              : "welcome",
+-          );
++          setVisibleOption(ambassador ? "ambassadors" : "welcome");
+ 
+           // Dismiss the overlay after a delay
+           if (timeoutRef.current) clearTimeout(timeoutRef.current);
+diff --git a/src/pages/panel/components/Nav.tsx b/src/pages/panel/components/Nav.tsx
+index 55f400e..2a21b74 100644
+--- a/src/pages/panel/components/Nav.tsx
++++ b/src/pages/panel/components/Nav.tsx
+@@ -1,6 +1,6 @@
+ import { useState } from "react";
+ 
+-import alveus from "../../../assets/alveus.png";
++import wbs from "../../../assets/wbs.png";
+ 
+ import IconInfo from "../../../components/icons/IconInfo";
+ import Welcome from "../../../components/Welcome";
+@@ -12,8 +12,10 @@ export default function Nav() {
+ 
+   return (
+     <nav className="fixed inset-x-0 top-0 z-10 flex h-12 w-full items-center justify-start gap-3 bg-alveus-green/85 px-4 shadow-lg backdrop-blur-sm sm:justify-center">
+-      <img className="h-8 w-auto" src={alveus} alt="Alveus Logo" />
+-      <h1 className="text-lg">Alveus Ambassadors</h1>
++      <img className="h-8 w-auto" src={wbs} alt="WBS Logo" />
++      <h1 className="text-lg leading-none text-balance">
++        World Bird Sanctuary Birds
++      </h1>
+       <button
+         className="group -mr-2 ml-auto rounded-full p-2 sm:absolute sm:right-4 sm:ml-0"
+         onClick={() => setShowWelcome(true)}
+diff --git a/src/template.html b/src/template.html
+index 63201f2..55e8f40 100644
+--- a/src/template.html
++++ b/src/template.html
+@@ -5,7 +5,7 @@
+     <meta name="viewport" content="width=device-width, initial-scale=1" />
+     <meta name="theme-color" content="#000000" />
+     <link rel="manifest" href="./manifest.json" />
+-    <title>Alveus Ambassadors</title>
++    <title>World Bird Sanctuary Birds</title>
+     <link rel="preconnect" href="https://extension-files.twitch.tv" />
+     <link rel="preconnect" href="https://fonts.googleapis.com" />
+     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
