@@ -4,7 +4,6 @@ import Confetti from "react-canvas-confetti";
 
 import { calculateAge, formatDate, isBirthday } from "../utils/dateManager";
 import { useAmbassador } from "../hooks/useAmbassadors";
-import { camelToKebab } from "../utils/helpers";
 import { classes } from "../utils/classes";
 
 import IconInfo from "./icons/IconInfo";
@@ -17,13 +16,10 @@ import Ring from "./Ring";
 import moderatorBadge from "../assets/mod.svg";
 import partyHat from "../assets/party.svg";
 import TiltCard from "./TiltCard";
+import { getIUCNStatus } from "@alveusgg/data/build/iucn";
 
 const headingClass = "text-base text-wbs-blue-400";
 const rowClass = "flex flex-wrap gap-x-6 gap-y-1 [&>*]:mr-auto";
-
-const stringifyLifespan = (value: number | { min: number; max: number }) => {
-  return typeof value === "number" ? `${value}` : `${value.min}-${value.max}`;
-};
 
 export interface AmbassadorCardProps {
   ambassador: string;
@@ -51,6 +47,9 @@ export default function AmbassadorCard(props: AmbassadorCardProps) {
   const birthday = ambassador?.birth && isBirthday(ambassador.birth);
   const age = ambassador?.birth ? calculateAge(ambassador.birth) : "Unknown";
   const birth = ambassador?.birth ? formatDate(ambassador.birth) : "Unknown";
+  const arrival = ambassador?.arrival
+    ? formatDate(ambassador.arrival)
+    : "Unknown";
 
   const internalRef = useRef<HTMLDivElement>(null);
   const callbackRef = useCallback(
@@ -183,52 +182,30 @@ export default function AmbassadorCard(props: AmbassadorCardProps) {
 
           <div>
             <h3 className={headingClass}>Species</h3>
-            <p>{ambassador.species.name}</p>
             <p>
-              <i>{ambassador.species.scientificName}</i>{" "}
-              <span className="text-wbs-blue-200">
-                ({ambassador.species.class.title})
-              </span>
+              <i>
+                {ambassador.species.name}{" "}
+                <span className="text-wbs-blue-200">
+                  ({ambassador.species.scientificName})
+                </span>
+              </i>
             </p>
-          </div>
-
-          <div className={rowClass}>
-            <div>
-              <h3 className={headingClass}>Sex</h3>
-              <p>{ambassador.sex || "Unknown"}</p>
-            </div>
-            <div>
-              <h3 className={headingClass}>Age</h3>
-              <p>
-                {age[0] === "~" && (
-                  <span className="text-base leading-none" title="Approx.">
-                    ~
-                  </span>
-                )}
-                {age.slice(age[0] === "~" ? 1 : 0)}
-              </p>
-            </div>
-            <div>
-              <h3 className={headingClass}>Birthday</h3>
-              <p>
-                {birth[0] === "~" && (
-                  <span className="text-base leading-none" title="Approx.">
-                    ~
-                  </span>
-                )}
-                {birth.slice(birth[0] === "~" ? 1 : 0)}
-              </p>
-            </div>
+            <p>{ambassador.species.description}</p>
           </div>
 
           <div>
-            <h3 className={headingClass}>Story</h3>
-            <p>{ambassador.story}</p>
+            <h3 className={headingClass}>Range</h3>
+            <p>{ambassador.species.range}</p>
           </div>
 
           <div>
-            <h3 className={headingClass}>Conservation Mission</h3>
-            <p>{ambassador.mission}</p>
+            <h3 className={headingClass}>Habitat</h3>
+            <p>{ambassador.species.habitat}</p>
+          </div>
+
+          <div>
+            <h3 className={headingClass}>Diet</h3>
+            <p>{ambassador.species.diet}</p>
           </div>
 
           <div>
@@ -256,96 +233,66 @@ export default function AmbassadorCard(props: AmbassadorCardProps) {
                   className="text-nowrap text-wbs-blue-200 transition-colors hover:text-highlight focus:text-highlight"
                 >
                   <span className="underline">
-                    {ambassador.species.iucn.title}
+                    {getIUCNStatus(ambassador.species.iucn.status)}
                   </span>{" "}
                   <IconExternal className="mb-0.5 inline-block" size={12} />
                 </a>
               ) : (
-                ambassador.species.iucn.title
-              )}
-            </p>
-          </div>
-
-          <div>
-            <h3 className={headingClass}>Native To</h3>
-            <p>{ambassador.species.native.text}</p>
-          </div>
-
-          <div>
-            <h3 className={headingClass}>Species Lifespan</h3>
-            <p>
-              Wild:{" "}
-              {"wild" in ambassador.species.lifespan &&
-              ambassador.species.lifespan.wild !== undefined ? (
-                <>
-                  <span className="text-base leading-none" title="Approx.">
-                    ~
-                  </span>
-                  {stringifyLifespan(ambassador.species.lifespan.wild)} years
-                </>
-              ) : (
-                "Unknown"
-              )}
-            </p>
-            <p>
-              Captivity:{" "}
-              {"captivity" in ambassador.species.lifespan &&
-              ambassador.species.lifespan.captivity !== undefined ? (
-                <>
-                  <span className="text-base leading-none" title="Approx.">
-                    ~
-                  </span>
-                  {stringifyLifespan(ambassador.species.lifespan.captivity)}{" "}
-                  years
-                </>
-              ) : (
-                "Unknown"
+                getIUCNStatus(ambassador.species.iucn.status)
               )}
             </p>
           </div>
 
           <div className={rowClass}>
             <div>
-              <h3 className={headingClass}>Enclosure</h3>
+              <h3 className={headingClass}>Sex</h3>
+              <p>{ambassador.sex || "Unknown"}</p>
+            </div>
+            <div>
+              <h3 className={headingClass}>Age</h3>
               <p>
-                <a
-                  href={`https://www.alveussanctuary.org/ambassadors#enclosures:${camelToKebab(ambassador.enclosure.key)}`}
-                  rel="noreferrer"
-                  target="_blank"
-                  className="text-nowrap text-wbs-blue-200 transition-colors hover:text-highlight focus:text-highlight"
-                >
-                  <span className="underline">
-                    {ambassador.enclosure.title}
-                  </span>{" "}
-                  <IconExternal className="mb-0.5 inline-block" size={12} />
-                </a>
+                {age[0] === "~" && (
+                  <span className="text-base leading-none" title="Approx.">
+                    ~
+                  </span>
+                )}
+                {age.slice(age[0] === "~" ? 1 : 0)}
               </p>
             </div>
             <div>
-              <h3 className={headingClass}>Arrived at Alveus</h3>
+              <h3 className={headingClass}>Hatched</h3>
               <p>
-                {ambassador.arrival
-                  ? formatDate(ambassador.arrival, false)
-                  : "Unknown"}
+                {birth[0] === "~" && (
+                  <span className="text-base leading-none" title="Approx.">
+                    ~
+                  </span>
+                )}
+                {birth.slice(birth[0] === "~" ? 1 : 0)}
               </p>
             </div>
           </div>
 
-          <div className="mt-3 italic">
-            <p>
-              Learn more about {ambassador.name} on the{" "}
-              <a
-                href={`https://www.alveussanctuary.org/ambassadors/${camelToKebab(
-                  ambassadorKey,
-                )}`}
-                rel="noreferrer"
-                target="_blank"
-                className="text-nowrap text-wbs-blue-200 transition-colors hover:text-highlight focus:text-highlight"
-              >
-                <span className="underline">Alveus Sanctuary website</span>{" "}
-                <IconExternal className="mb-0.5 inline-block" size={12} />
-              </a>
-            </p>
+          <div className={rowClass}>
+            <div>
+              <h3 className={headingClass}>Arrival</h3>
+              <p>
+                {arrival[0] === "~" && (
+                  <span className="text-base leading-none" title="Approx.">
+                    ~
+                  </span>
+                )}
+                {arrival.slice(arrival[0] === "~" ? 1 : 0)}
+              </p>
+            </div>
+            <div>
+              <h3 className={headingClass}>Reason</h3>
+              <p>{ambassador.reason}</p>
+            </div>
+          </div>
+
+          <div>
+            <h3 className={headingClass}>Story</h3>
+            <p>{ambassador.story}</p>
           </div>
         </div>
 

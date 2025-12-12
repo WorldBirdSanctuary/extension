@@ -1,4 +1,4 @@
-import { basename, dirname, join } from "path";
+import { join } from "path";
 
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import CopyWebpackPlugin from "copy-webpack-plugin";
@@ -234,34 +234,14 @@ const config: webpack.Configuration = {
       },
       // Load images
       {
-        test: /\.(png|jpe?g|gif|svg)$/i,
-        exclude: /node_modules/,
-        type: "asset",
-      },
-      // Load ambassador images in @alveusgg packages
-      {
-        test: /\.(png|jpe?g)$/,
+        test: /\.(png|jpe?g)$/i,
         include: [
-          new RegExp(
-            join(
-              "node_modules",
-              "@alveusgg",
-              "data",
-              "build",
-              "assets",
-              "ambassadors",
-            ).replace(/\\/g, "\\\\"),
-          ),
-          new RegExp(join("src", "assets", "winston").replace(/\\/g, "\\\\")),
+          new RegExp(join("src", "assets", "birds").replace(/\\/g, "\\\\")),
         ],
         type: "asset",
         generator: {
-          filename: (pathData) => {
-            if (!pathData.filename) return "";
-            const dir = basename(dirname(pathData.filename));
-            return `static/media/ambassadors/${dir}/[name].[contenthash][ext]`;
-          },
-        } as webpack.WebpackOptionsNormalized["module"]["generator"]["asset"],
+          filename: "static/media/birds/[name].[contenthash][ext]",
+        },
         use: [
           {
             loader: "webpack-image-resize-loader",
@@ -270,6 +250,10 @@ const config: webpack.Configuration = {
             },
           },
         ],
+      },
+      {
+        test: /\.(png|jpe?g|gif|svg)$/i,
+        type: "asset",
       },
     ],
   },
