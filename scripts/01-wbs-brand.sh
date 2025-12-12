@@ -9,8 +9,7 @@ if [ -z "$PATCH_DIR" ]; then
 fi
 
 # Update the extension branding to World Bird Sanctuary (WBS).
-# TODO: Update other references (e.g., welcome card)
-git apply "$PATCH_DIR/patches/01-wbs-brand.patch"
+git apply --3way "$PATCH_DIR/patches/01-wbs-brand.patch"
 
 # Remove the Alveus logo
 rm src/assets/alveus.png

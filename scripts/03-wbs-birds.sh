@@ -9,7 +9,7 @@ if [ -z "$PATCH_DIR" ]; then
 fi
 
 # Update the ambassadors hook to load WBS birds.
-git apply "$PATCH_DIR/patches/03-wbs-birds.patch"
+git apply --3way "$PATCH_DIR/patches/03-wbs-birds.patch"
 
 # Copy across the WBS birds + species data + images.
 mkdir -p src/data/
