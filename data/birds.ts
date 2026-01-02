@@ -19,7 +19,6 @@ import kinsey from "../assets/birds/kinsey.jpg";
 import maverick from "../assets/birds/maverick.jpg";
 import midas from "../assets/birds/midas.jpg";
 import minerva from "../assets/birds/minerva.jpg";
-import mitch from "../assets/birds/mitch.jpg";
 import msRubyG from "../assets/birds/ms-ruby-g.jpg";
 import oasis from "../assets/birds/oasis.jpg";
 import patriot from "../assets/birds/patriot.jpg";
@@ -272,22 +271,6 @@ export const birds = {
     reason: "Education ambassador",
     story:
       "Minerva was hatched at the World Bird Sanctuary as an ambassador for her species. American Barn Owls were once endangered in Missouri so Minerva's work as an ambassador is vital to help keep wild barn owls protected. Minerva was hand-raised by our staff to ensure she feels safe, calm, and confident around people—essential qualities for an ambassador owl. Since her training started so young, Minerva quickly became one of our most dependable and confident fliers. She's a crowd favorite, often soaring over audiences during educational programs, and is a top pick for off-site events thanks to her consistent and graceful flight patterns. While owls are known for their silent flight, Minerva adds her own flair with cheerful screeches—on the glove and in the air! She also has a strong personality when it comes to food. Minerva is our only American Barn Owl with gourmet tastes—she happily eats rats and mice but will stubbornly refuse anything else, often spitting it out and waiting for something better. Minerva's presence helps us educate and inspire people every day, and we're honored to have her as part of our ambassador team.",
-  },
-  mitch: {
-    name: "Mitch",
-    commands: ["mitch"],
-    image: {
-      src: mitch,
-      alt: "Mitch the Bald Eagle",
-      position: "50% 20%",
-    },
-    species: species.haliaeetusLeucocephalus,
-    sex: "Female",
-    birth: null,
-    arrival: "2011-09-01",
-    reason: "Ring wing amputation",
-    story:
-      "Mitch came to the World Bird Sanctuary from a facility in Wisconsin after recovering from a wing injury. Her right elbow was permanently fused, preventing her from flying. Over the years her wing began to droop more and more, requiring a partial amputation. She made a great recovery and has been much happier since! Mitch gets around her aviary with surprising agility and confidence. She lives with other Bald Eagles and isn't afraid to throw her weight around—screeching at anyone who gets too close to her nest or food. Staff know her as the queen of the roost, and she makes sure they don't forget it! Despite her sass, Mitch gets along with her eagle roommates, especially her buddy Boston. Her confidence and bold personality have made her a favorite of the staff that care for her. You can find her hanging out with her roommates on our Avian Avenue walkway year round, typically perched near \"her\" gazebo!",
   },
   msRubyG: {
     name: "Ms. Ruby G",
