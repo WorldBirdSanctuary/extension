@@ -1,16 +1,9 @@
-import { useMemo } from "react";
-
 import IconGlobe from "./icons/IconGlobe";
 import IconAmazon from "./icons/IconAmazon";
 import IconInstagram from "./icons/IconInstagram";
 import IconTikTok from "./icons/IconTikTok";
-import IconTwitter from "./icons/IconTwitter";
-import IconBluesky from "./icons/IconBluesky";
 import IconFacebook from "./icons/IconFacebook";
-import IconPlay from "./icons/IconPlay";
 import IconGitHub from "./icons/IconGitHub";
-
-import useChannel from "../hooks/useChannel";
 
 import Card from "./Card";
 
@@ -24,25 +17,19 @@ interface WelcomeProps {
 export default function Welcome(props: WelcomeProps) {
   const { className } = props;
 
-  const channel = useChannel();
-  const nonDefault = useMemo(
-    () => !channel || channel.toLowerCase() !== "alveussanctuary",
-    [channel],
-  );
-
   return (
-    <Card className={className} title="Welcome to Alveus">
+    <Card className={className} title="Welcome to World Bird Sanctuary">
       <p className="mt-2 mb-4">
-        Alveus Sanctuary is a 501(c)(3) non-profit organization that functions
-        as a wildlife sanctuary and as a virtual education center. These
-        non-releasable animals are educational ambassadors so viewers can learn
-        from and build a connection to them.
+        Nestled on 305 acres of serene Missouri hardwood forest, World Bird
+        Sanctuary is a destination for nature enthusiasts. We protect and
+        preserve birds and their habitats through conservation, rehabilitation,
+        and education.
       </p>
 
       <ul className="mb-2 flex flex-wrap items-center justify-center gap-4">
         <li className={socialClass}>
           <a
-            href="https://www.alveussanctuary.org"
+            href="https://www.worldbirdsanctuary.org"
             rel="noreferrer"
             target="_blank"
             title="Website"
@@ -52,7 +39,7 @@ export default function Welcome(props: WelcomeProps) {
         </li>
         <li className={socialClass}>
           <a
-            href="https://www.alveussanctuary.org/wishlist"
+            href="https://www.amazon.com/hz/wishlist/ls/2X3ZNQ38V41RE"
             rel="noreferrer"
             target="_blank"
             title="Amazon Wishlist"
@@ -62,7 +49,7 @@ export default function Welcome(props: WelcomeProps) {
         </li>
         <li className={socialClass}>
           <a
-            href="https://www.alveussanctuary.org/instagram"
+            href="https://www.instagram.com/worldbirdsanctuary"
             rel="noreferrer"
             target="_blank"
             title="Instagram"
@@ -72,7 +59,7 @@ export default function Welcome(props: WelcomeProps) {
         </li>
         <li className={socialClass}>
           <a
-            href="https://www.alveussanctuary.org/tiktok"
+            href="https://www.tiktok.com/@worldbirdstl"
             rel="noreferrer"
             target="_blank"
             title="TikTok"
@@ -82,27 +69,7 @@ export default function Welcome(props: WelcomeProps) {
         </li>
         <li className={socialClass}>
           <a
-            href="https://www.alveussanctuary.org/twitter"
-            rel="noreferrer"
-            target="_blank"
-            title="X (Twitter)"
-          >
-            <IconTwitter size={32} />
-          </a>
-        </li>
-        <li className={socialClass}>
-          <a
-            href="https://www.alveussanctuary.org/bluesky"
-            rel="noreferrer"
-            target="_blank"
-            title="Bluesky"
-          >
-            <IconBluesky size={32} />
-          </a>
-        </li>
-        <li className={socialClass}>
-          <a
-            href="https://www.alveussanctuary.org/facebook"
+            href="https://www.facebook.com/WorldBirdSanctuary"
             rel="noreferrer"
             target="_blank"
             title="Facebook"
@@ -110,23 +77,11 @@ export default function Welcome(props: WelcomeProps) {
             <IconFacebook size={32} />
           </a>
         </li>
-        {nonDefault && (
-          <li className={socialClass}>
-            <a
-              href="https://www.alveussanctuary.org/live"
-              rel="noreferrer"
-              target="_blank"
-              title="Live"
-            >
-              <IconPlay size={32} />
-            </a>
-          </li>
-        )}
       </ul>
 
       <a
         className="flex w-fit items-center justify-center gap-1 text-xs transition-colors hover:text-highlight focus:text-highlight"
-        href="https://github.com/alveusgg/extension"
+        href="https://github.com/worldbirdsanctuary/extension"
         rel="noreferrer"
         target="_blank"
       >

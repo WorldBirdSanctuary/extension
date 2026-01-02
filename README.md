@@ -1,20 +1,10 @@
-# The Alveus Twitch Extension
+# World Bird Sanctuary Twitch Extension
 
-Twitch extension for [Alveus Sanctuary](https://www.alveussanctuary.org), allowing stream viewers to learn more about the ambassadors at the sanctuary.
+Twitch extension for [World Bird Sanctuary](https://www.worldbirdsanctuary.org), allowing stream viewers to learn more about the birds at the sanctuary.
 
-## Demo
+This extension is directly based on the work of the Alveus.gg team and their [Alveus Sanctuary Twitch Extension](https://github.com/alveusgg/extension), with a set of changes applied to customize it for World Bird Sanctuary.
 
-### Overlay
-
-https://user-images.githubusercontent.com/49528805/229294979-1cf91fc2-420a-43ec-95c4-78c06d4ec99d.mp4
-
-### Panel
-
-https://user-images.githubusercontent.com/49528805/229295136-675313d2-54e4-4758-a42c-76961c4d2e66.mp4
-
-### Mobile
-
-https://user-images.githubusercontent.com/49528805/229295376-6490d0a5-5f01-456b-8509-6e551ce82f1c.mp4
+Refer to the [README.md](https://github.com/worldbirdsanctuary/extension/blob/patches/README.md) in the `patches` branch to understand how the changes are applied to this branch.
 
 ## Local Set Up
 
@@ -79,31 +69,23 @@ The panel is available at [localhost:8080/panel.html](https://localhost:8080/pan
 
 ## Chatbot Commands
 
-`![ambassador]`: displays the card of the corresponding ambassador
+`![bird]`: displays the card of the corresponding bird
 
-- Note: `[ambassador]` is the first name of any ambassador (Ex: !nilla = Nilla Wafer, !snork = Snork)
+- Note: `[bird]` is the first name of any bird (Ex: !sayyida = Sayyida)
 
-`!welcome`: displays the Alveus introduction section
+`!welcome`: displays the WBS introduction section
 
-`!refresh`: updates the overlay and panel with the latest ambassador data
+`!refresh`: updates the overlay and panel with the latest bird data
 
 - Note: Only `REACT_APP_CHAT_COMMANDS_PRIVILEGED_USERS` have permission to run this command
 
 ## Contribute
 
-Contributions are always welcome! If you have any ideas, suggestions, fixes, feel free to contribute. Make sure to discuss what you plan to work on either as an issue or in the discussion page. You can also throw in any ideas at all in the discussion page. You can contribute to the codebase by going through the following steps:
-
-1. Fork this repo
-2. Create a branch: `git checkout -b youruserame/your-feature`
-3. Make some changes
-4. Test your changes
-5. Push your branch and open a Pull Request
-
-<b>\*Note:</b> All contributions must be possible for all displays (Overlay & Panel) and responsive to their different sizes (including mobile).
+Refer to the [README.md](https://github.com/worldbirdsanctuary/extension/blob/patches/README.md) in the `patches` branch to understand how to contribute changes to this extension.
 
 ## User Data
 
-When using the extension, the extension will create an anonymous connection to the current Twitch channel's chat, as well as a few other Alveus-related Twitch channels. This is to allow the extension to listen for commands run by moderators to trigger popups in the overlay. The extension does not store any messages from chat.
+When using the extension, the extension will create an anonymous connection to the current Twitch channel's chat. This is to allow the extension to listen for commands run by moderators to trigger popups in the overlay. The extension does not store any messages from chat.
 
 When using the extension, it will create a local storage entry in your browser to store the last section of the overlay that you accessed, and any preferences you set (such as disabling the mod-triggered popups). This is to allow the extension to remember your preferences between sessions. The data stored in local storage is not shared with anyone and does not include any personal information.
 

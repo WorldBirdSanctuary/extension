@@ -8,7 +8,7 @@ All new versions start in local test where the base URI is `https://localhost:80
 
 The "panel viewer path" should be `panel.html`, the "mobile viewer path" as `mobile.html`, and "video - fullscreen viewer path" as `video_overlay.html`.
 
-Ensure that the allowlist for image domains is set to allow `https://www.alveussanctuary.org` for ambassador images, the allowlist for media domains is set to allow `https://fonts.googleapis.com/` for fonts, and that allowlist for URL fetching domains is set to include `wss://irc-ws.chat.twitch.tv:443`, `ws://irc-ws.chat.twitch.tv:80`, `irc://irc.chat.twitch.tv:6667`, `irc://irc.chat.twitch.tv:6697` to allow connecting to chat as well as `https://ext.alveussanctuary.org` to allow fetching ambassador data.
+Ensure that the allowlist for image domains is set to allow `https://worldbirdsanctuary.github.io` for bird images, the allowlist for media domains is set to allow `https://fonts.googleapis.com/` for fonts, and that allowlist for URL fetching domains is set to include `wss://irc-ws.chat.twitch.tv:443`, `ws://irc-ws.chat.twitch.tv:80`, `irc://irc.chat.twitch.tv:6667`, `irc://irc.chat.twitch.tv:6697` to allow connecting to chat as well as `https://worldbirdsanctuary.github.io` to allow fetching bird data.
 
 ## Hosted test
 
@@ -26,15 +26,11 @@ Include the walkthrough guide for the extension, with an updated changelog of wh
 <summary>Walkthrough guide and changelog template</summary>
 
 ```text
-Note: "ambassadors" are the animals displayed in the extension (they are educational ambassadors for their species).
-
-This extension displays information about ambassadors at Alveus Sanctuary within the Panel and Overlay view.
-It is designed to be used by channels that are hosting collaboration streams at Alveus.
-It allows viewers to explore more information about the ambassadors seen on the stream, at any time.
-It allows the broadcaster/moderators to run chat commands to display information about specific ambassadors to everyone, as they are shown on stream.
+This extension displays information about birds at World Bird Sanctuary (WBS) within the Panel and Overlay view.
+It allows viewers to explore more information about the birds seen on the stream, at any time.
+It allows the broadcaster/moderators to run chat commands to display information about specific birds to everyone, as they are shown on stream.
 
 This extension is made with React, and is bundled with Webpack.
-Due to the nature (frequency and last-minute-ness) of collaboration streams, it is not tenable to maintain an access list and create new releases for each collaboration, so this is published as a global overlay.
 
 Changelog:
 
@@ -42,32 +38,29 @@ Changelog:
 
 Source code diff:
 
-    https://github.com/alveusgg/extension/compare/v<previous version here>...v<new version here>
+    https://github.com/worldbirdsanctuary/extension/compare/v<previous version here>...v<new version here>
 
 External links:
 
-    All links are related to Alveus Sanctuary, and can be found in the ambassador cards as well as the overlay welcome card.
+    All links are related to World Bird Sanctuary, and can be found in the bird cards as well as the overlay welcome card.
 
-    - Alveus Sanctuary website (homepage + ambassador pages)
-    - Alveus Amazon Wishlist
-    - Alveus Instagram
-    - Alveus TikTok
-    - Alveus X/Twitter
-    - Alveus Bluesky
-    - Alveus Facebook
+    - World Bird Sanctuary website (homepage + bird pages)
+    - WBS Amazon Wishlist
+    - WBS Instagram
+    - WBS TikTok
+    - WBS Facebook
     - Extension GitHub (Open-source code for the extension, encouraging users to contribute to and improve the extension)
 
 Allowlist explanations:
 
     - `https://fonts.googleapis.com/` Google Fonts, for loading fonts in the extension
     - `wss://irc-ws.chat.twitch.tv:443`, `ws://irc-ws.chat.twitch.tv:80`, `irc://irc.chat.twitch.tv:6667`, `irc://irc.chat.twitch.tv:6697` Twitch chat URLs, for the chatbot to connect to
-    - `https://www.alveussanctuary.org` Alveus Sanctuary website, for fetching ambassador images
-    - `https://ext.alveussanctuary.org` Alveus Sanctuary website (cached API), for fetching ambassador data
+    - `https://worldbirdsanctuary.github.io` WBS extension deployment, for fetching bird data and images
 
 Testing the Extension:
 
     - For overlay, mobile + panel: Click the buttons to explore the extension
-    - For overlay: As a moderator or broadcaster, type `!welcome` in chat to trigger the welcome card, type `!snork` to trigger an ambassador card
+    - For overlay: As a moderator or broadcaster, type `!welcome` in chat to trigger the welcome card, type `!sayyida` to trigger a bird card
 ```
 
 </details>
