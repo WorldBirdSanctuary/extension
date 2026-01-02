@@ -28,7 +28,7 @@ export default function Select<T extends string = string>(
     <label className="group flex cursor-pointer items-center gap-2">
       <span className="text-xs">{label}</span>
       <select
-        className="cursor-pointer rounded-lg border-none bg-alveus-tan-100 px-2 py-1 text-xs text-alveus-green outline-highlight transition-[outline] group-focus-within:outline-3 group-hover:outline-3"
+        className="cursor-pointer rounded-lg border-none bg-wbs-grey-100 px-2 py-1 text-xs text-wbs-blue outline-highlight transition-[outline] group-focus-within:outline-3 group-hover:outline-3"
         onChange={onChangeNative}
         value={value}
       >
