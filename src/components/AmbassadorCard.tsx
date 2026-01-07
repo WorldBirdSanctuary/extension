@@ -18,7 +18,7 @@ import moderatorBadge from "../assets/mod.svg";
 import partyHat from "../assets/party.svg";
 import TiltCard from "./TiltCard";
 
-const headingClass = "text-base text-alveus-green-400";
+const headingClass = "text-base text-wbs-blue-400";
 const rowClass = "flex flex-wrap gap-x-6 gap-y-1 [&>*]:mr-auto";
 
 const stringifyLifespan = (value: number | { min: number; max: number }) => {
@@ -127,7 +127,7 @@ export default function AmbassadorCard(props: AmbassadorCardProps) {
       <TiltCard
         disabled={disableCardEffects}
         className={classes(
-          "relative flex max-h-full min-h-[min(28rem,100%)] w-80 max-w-full flex-col justify-start rounded-lg bg-alveus-green-900 align-top text-xs shadow-xl",
+          "relative flex max-h-full min-h-[min(28rem,100%)] w-80 max-w-full flex-col justify-start rounded-lg bg-wbs-blue-900 align-top text-xs shadow-xl",
           className,
         )}
         ref={callbackRef}
@@ -150,7 +150,7 @@ export default function AmbassadorCard(props: AmbassadorCardProps) {
           loading="lazy"
         />
 
-        <div className="relative flex w-full items-center justify-center bg-alveus-green px-8 py-1">
+        <div className="relative flex w-full items-center justify-center bg-wbs-blue px-8 py-1">
           {onClose && (
             <button
               className="absolute left-0 p-1 transition-colors hover:text-highlight active:text-highlight sm:hidden"
@@ -166,7 +166,7 @@ export default function AmbassadorCard(props: AmbassadorCardProps) {
             {ambassador.name}
           </h2>
         </div>
-        <div className="mb-2 scrollbar-thin flex flex-auto flex-col gap-1 overflow-y-auto p-2 scrollbar-thumb-alveus-green scrollbar-track-alveus-green-900">
+        <div className="mb-2 scrollbar-thin flex flex-auto flex-col gap-1 overflow-y-auto p-2 scrollbar-thumb-wbs-blue scrollbar-track-wbs-blue-900">
           {mod && (
             <div className="flex items-center gap-2">
               <img
@@ -186,7 +186,7 @@ export default function AmbassadorCard(props: AmbassadorCardProps) {
             <p>{ambassador.species.name}</p>
             <p>
               <i>{ambassador.species.scientificName}</i>{" "}
-              <span className="text-alveus-green-200">
+              <span className="text-wbs-blue-200">
                 ({ambassador.species.class.title})
               </span>
             </p>
@@ -241,7 +241,7 @@ export default function AmbassadorCard(props: AmbassadorCardProps) {
                 <h3 className={headingClass}>Conservation Status</h3>
                 <IconInfo
                   size={20}
-                  className="rounded-full text-alveus-green-400 outline-highlight transition-[outline] hover:outline-3"
+                  className="rounded-full text-wbs-blue-400 outline-highlight transition-[outline] hover:outline-3"
                 />
               </div>
             </Tooltip>
@@ -253,7 +253,7 @@ export default function AmbassadorCard(props: AmbassadorCardProps) {
                   href={`https://www.iucnredlist.org/species/${ambassador.species.iucn.id}/${ambassador.species.iucn.assessment}`}
                   rel="noreferrer"
                   target="_blank"
-                  className="text-nowrap text-alveus-green-200 transition-colors hover:text-highlight focus:text-highlight"
+                  className="text-nowrap text-wbs-blue-200 transition-colors hover:text-highlight focus:text-highlight"
                 >
                   <span className="underline">
                     {ambassador.species.iucn.title}
@@ -312,7 +312,7 @@ export default function AmbassadorCard(props: AmbassadorCardProps) {
                   href={`https://www.alveussanctuary.org/ambassadors#enclosures:${camelToKebab(ambassador.enclosure.key)}`}
                   rel="noreferrer"
                   target="_blank"
-                  className="text-nowrap text-alveus-green-200 transition-colors hover:text-highlight focus:text-highlight"
+                  className="text-nowrap text-wbs-blue-200 transition-colors hover:text-highlight focus:text-highlight"
                 >
                   <span className="underline">
                     {ambassador.enclosure.title}
@@ -340,7 +340,7 @@ export default function AmbassadorCard(props: AmbassadorCardProps) {
                 )}`}
                 rel="noreferrer"
                 target="_blank"
-                className="text-nowrap text-alveus-green-200 transition-colors hover:text-highlight focus:text-highlight"
+                className="text-nowrap text-wbs-blue-200 transition-colors hover:text-highlight focus:text-highlight"
               >
                 <span className="underline">Alveus Sanctuary website</span>{" "}
                 <IconExternal className="mb-0.5 inline-block" size={12} />

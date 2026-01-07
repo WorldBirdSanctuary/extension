@@ -22,11 +22,11 @@ import IconChevron from "../../../../components/icons/IconChevron";
 import useSettings from "../../hooks/useSettings";
 
 const arrowClass =
-  "absolute border-0 cursor-pointer text-alveus-green w-full h-[var(--list-fade-padding)] z-20 transition-opacity group pt-[var(--twitch-vertical-padding)] pb-4 box-content";
+  "absolute border-0 cursor-pointer text-wbs-blue w-full h-[var(--list-fade-padding)] z-20 transition-opacity group pt-[var(--twitch-vertical-padding)] pb-4 box-content";
 const arrowSvgClass =
   "mx-auto drop-shadow-lg overflow-visible transition-transform group-hover:scale-125 group-focus:scale-125";
 const arrowPathClass =
-  "[&_path]:stroke-alveus-tan [&_path]:stroke-[0.25rem] [&_path]:[paint-order:stroke] [&_path]:transition-[stroke] [&_path]:group-hover:stroke-highlight [&_path]:group-hover:stroke-[0.375rem] [&_path]:group-focus:stroke-highlight [&_path]:group-focus:stroke-[0.375rem]";
+  "[&_path]:stroke-wbs-grey [&_path]:stroke-[0.25rem] [&_path]:[paint-order:stroke] [&_path]:transition-[stroke] [&_path]:group-hover:stroke-highlight [&_path]:group-hover:stroke-[0.375rem] [&_path]:group-focus:stroke-highlight [&_path]:group-focus:stroke-[0.375rem]";
 const hiddenClass = "opacity-0 pointer-events-none";
 
 type AmbassadorsProps = OverlayOptionProps;
