@@ -66,7 +66,7 @@ index ee13226..08fa1c8 100644
  When using the extension, it will create a local storage entry in your browser to store the last section of the overlay that you accessed, and any preferences you set (such as disabling the mod-triggered popups). This is to allow the extension to remember your preferences between sessions. The data stored in local storage is not shared with anyone and does not include any personal information.
  
 diff --git a/RELEASE.md b/RELEASE.md
-index 14996d2..f6340fb 100644
+index 14996d2..bc676aa 100644
 --- a/RELEASE.md
 +++ b/RELEASE.md
 @@ -8,7 +8,7 @@ All new versions start in local test where the base URI is `https://localhost:80
@@ -102,7 +102,7 @@ index 14996d2..f6340fb 100644
  Source code diff:
  
 -    https://github.com/alveusgg/extension/compare/v<previous version here>...v<new version here>
-+    https://github.com/worldbirdsanctuary/extension/compare/v<previous version here>...v<new version here>
++    https://github.com/worldbirdsanctuary/extension/compare/v<previous version here>..v<new version here>
  
  External links:
  
