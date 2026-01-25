@@ -36,7 +36,7 @@ export const birdSchema = z.object({
   name: z.string(),
   commands: z.array(z.string()).readonly(),
   image: ambassadorImageSchema.extend({
-    src: z.url(),
+    src: z.union([z.url(), z.string().startsWith("./")]),
   }),
   species: speciesSchema,
   sex: z.literal(["Male", "Female"]).nullable(),

@@ -24,7 +24,7 @@ index 34ac0ca..fdf1b70 100644
 +REACT_APP_API_BASE_URL=https://worldbirdsanctuary.github.io/extension
  REACT_APP_TIMEZONE=America/Chicago
 diff --git a/src/components/AmbassadorCard.tsx b/src/components/AmbassadorCard.tsx
-index 4b137f1..4adddef 100644
+index 945ae36..4adddef 100644
 --- a/src/components/AmbassadorCard.tsx
 +++ b/src/components/AmbassadorCard.tsx
 @@ -4,7 +4,6 @@ import Confetti from "react-canvas-confetti";
@@ -128,7 +128,7 @@ index 4b137f1..4adddef 100644
            </div>
  
            <div>
-@@ -256,96 +233,66 @@ export default function AmbassadorCard(props: AmbassadorCardProps) {
+@@ -256,94 +233,66 @@ export default function AmbassadorCard(props: AmbassadorCardProps) {
                    className="text-nowrap text-wbs-blue-200 transition-colors hover:text-highlight focus:text-highlight"
                  >
                    <span className="underline">
@@ -146,15 +146,16 @@ index 4b137f1..4adddef 100644
  
 -          <div>
 -            <h3 className={headingClass}>Native To</h3>
--            <p>{ambassador.species.native.text}</p>
+-            <p>{ambassador.species.native}</p>
 -          </div>
 -
 -          <div>
 -            <h3 className={headingClass}>Species Lifespan</h3>
 -            <p>
 -              Wild:{" "}
--              {"wild" in ambassador.species.lifespan &&
--              ambassador.species.lifespan.wild !== undefined ? (
+-              {typeof ambassador.species.lifespan.wild === "string" ? (
+-                ambassador.species.lifespan.wild
+-              ) : (
 -                <>
 +          <div className={rowClass}>
 +            <div>
@@ -170,14 +171,13 @@ index 4b137f1..4adddef 100644
                    </span>
 -                  {stringifyLifespan(ambassador.species.lifespan.wild)} years
 -                </>
--              ) : (
--                "Unknown"
 -              )}
 -            </p>
 -            <p>
 -              Captivity:{" "}
--              {"captivity" in ambassador.species.lifespan &&
--              ambassador.species.lifespan.captivity !== undefined ? (
+-              {typeof ambassador.species.lifespan.captivity === "string" ? (
+-                ambassador.species.lifespan.captivity
+-              ) : (
 -                <>
 +                )}
 +                {age.slice(age[0] === "~" ? 1 : 0)}
@@ -193,8 +193,6 @@ index 4b137f1..4adddef 100644
 -                  {stringifyLifespan(ambassador.species.lifespan.captivity)}{" "}
 -                  years
 -                </>
--              ) : (
--                "Unknown"
 -              )}
 -            </p>
 +                )}
@@ -261,10 +259,10 @@ index 4b137f1..4adddef 100644
          </div>
  
 diff --git a/src/hooks/useAmbassadors.tsx b/src/hooks/useAmbassadors.tsx
-index 5dce32e..38d910c 100644
+index 7df65f6..f8841c1 100644
 --- a/src/hooks/useAmbassadors.tsx
 +++ b/src/hooks/useAmbassadors.tsx
-@@ -3,59 +3,17 @@ import {
+@@ -3,63 +3,21 @@ import {
    useCallback,
    useContext,
    useEffect,
@@ -329,7 +327,12 @@ index 5dce32e..38d910c 100644
  
  // Use transform here so we parse each ambassador individually
  const apiSchema = z.object({
-@@ -86,12 +44,12 @@ const apiSchema = z.object({
+-  v4: z
++  v1: z
+     .record(
+       z.string(),
+       // Use nullable here as the fallback for when we fail to parse an ambassador
+@@ -86,55 +44,21 @@ const apiSchema = z.object({
      }),
  });
  
@@ -347,8 +350,11 @@ index 5dce32e..38d910c 100644
    if (!response.ok)
      throw new Error(
        `Failed to fetch ambassadors: ${response.status} ${response.statusText} ${await response.text()}`,
-@@ -101,40 +59,6 @@ const fetchAmbassadors = async (): Promise<Record<string, Ambassador>> => {
-   return apiSchema.parse(data).v3;
+     );
+ 
+   const data = await response.json();
+-  return apiSchema.parse(data).v4;
++  return apiSchema.parse(data).v1;
  };
  
 -const fallbackAmbassadors: Record<string, Ambassador> =
@@ -388,7 +394,7 @@ index 5dce32e..38d910c 100644
  // Use a context to fetch the ambassadors from the API
  const Context = createContext<{
    ambassadors: Record<string, Ambassador> | null;
-@@ -191,81 +115,9 @@ export const AmbassadorsProvider = ({
+@@ -191,79 +115,9 @@ export const AmbassadorsProvider = ({
    );
  };
  
@@ -406,13 +412,11 @@ index 5dce32e..38d910c 100644
 -      title: getIUCNStatus("NE"),
 -      status: "NE",
 -    },
--    native: {
--      text: "Twitch chat (including the Animals, Aquariums, & Zoos category), miscellaneous emote services",
--      source:
--        "https://clips.twitch.tv/TangibleFurryTortoiseBCWarrior-izyQ3nOgq1pYe1rc", // https://clips.twitch.tv/CleverSecretiveAntChocolateRain--zjm5eRw6zxG75Up
--    },
+-    native:
+-      "Twitch chat (including the Animals, Aquariums, & Zoos category), miscellaneous emote services",
 -    lifespan: {
--      source: "",
+-      wild: "Unknown",
+-      captivity: "Unknown",
 -    },
 -    birth: "live",
 -    class: {
@@ -472,7 +476,7 @@ index 5dce32e..38d910c 100644
  
  export const useAmbassador = (key: string) => {
 diff --git a/webpack.config.ts b/webpack.config.ts
-index 8989b1d..de77753 100644
+index 3a56261..00c2939 100644
 --- a/webpack.config.ts
 +++ b/webpack.config.ts
 @@ -1,4 +1,4 @@
@@ -481,7 +485,7 @@ index 8989b1d..de77753 100644
  
  import HtmlWebpackPlugin from "html-webpack-plugin";
  import CopyWebpackPlugin from "copy-webpack-plugin";
-@@ -231,34 +231,14 @@ const config: webpack.Configuration = {
+@@ -234,34 +234,14 @@ const config: webpack.Configuration = {
        },
        // Load images
        {
@@ -520,7 +524,7 @@ index 8989b1d..de77753 100644
          use: [
            {
              loader: "webpack-image-resize-loader",
-@@ -268,6 +248,10 @@ const config: webpack.Configuration = {
+@@ -271,6 +251,10 @@ const config: webpack.Configuration = {
            },
          ],
        },
