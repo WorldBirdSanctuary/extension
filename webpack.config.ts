@@ -1,4 +1,5 @@
 import { join } from "path";
+import vm from "vm";
 
 import ReactRefreshWebpackPlugin from "@pmmmwh/react-refresh-webpack-plugin";
 import CopyWebpackPlugin from "copy-webpack-plugin";
@@ -75,6 +76,113 @@ class UnusedAssetsPlugin {
   }
 }
 
+class JsonOutputPlugin {
+  private entry: string;
+  private name: string;
+  private output: string;
+  private options: Pick<webpack.EntryOptions, "publicPath">;
+
+  constructor(options: {
+    entry: string;
+    output: string;
+    options?: Pick<webpack.EntryOptions, "publicPath">;
+  }) {
+    this.entry = options.entry;
+    this.name = `__json_output_plugin__${options.entry
+      .replace(/[^a-zA-Z0-9]/g, "_")
+      .replace(/^_+|_+$/g, "")
+      .replace(/_+/g, "_")}`;
+    this.output = options.output;
+    this.options = options.options || {};
+  }
+
+  apply(compiler: webpack.Compiler) {
+    compiler.hooks.make.tapAsync(
+      "JsonOutputPlugin",
+      (compilation, callback) => {
+        // Create a child compiler for the JSON entry
+        const childCompiler = compilation.createChildCompiler(
+          "JsonOutputPlugin",
+          {
+            filename: this.name,
+          },
+          [
+            new webpack.library.EnableLibraryPlugin("commonjs2"),
+            new webpack.EntryPlugin(compiler.context, this.entry, {
+              ...this.options,
+              name: this.name,
+              library: {
+                type: "commonjs2",
+              },
+            }),
+          ],
+        );
+
+        const error = (message: string) => {
+          compilation.errors.push(new Error(message));
+          callback();
+        };
+
+        // Run the child compiler
+        childCompiler.runAsChild((err, _entries, childCompilation) => {
+          if (err) {
+            return error(
+              `Error compiling JsonOutputPlugin entry: ${this.entry}\n${err}`,
+            );
+          }
+
+          if (!childCompilation) {
+            return error(
+              `No compilation found for JsonOutputPlugin entry: ${this.entry}`,
+            );
+          }
+
+          // Ensure the temporary asset doesn't propagate
+          compilation.deleteAsset(this.name);
+
+          // Get the source code for the temporary asset
+          const source = childCompilation.assets[this.name]
+            ?.source()
+            .toString();
+          if (!source) {
+            return error(
+              `No source found for JsonOutputPlugin entry: ${this.entry}`,
+            );
+          }
+
+          // Execute the source in a VM to get the exported data
+          const sandbox = { module: { exports: {} as Record<string, any> } };
+          const context = vm.createContext(sandbox);
+          try {
+            vm.runInContext(source, context);
+          } catch (vmErr) {
+            return error(
+              `Error executing JsonOutputPlugin entry: ${this.entry}\n${vmErr}`,
+            );
+          }
+
+          // Get the default export
+          const data = sandbox.module.exports.default;
+          if (!data) {
+            return error(
+              `No default export found for JsonOutputPlugin entry: ${this.entry}`,
+            );
+          }
+
+          // Emit the JSON file
+          const json = JSON.stringify(data, null, 2);
+          compilation.emitAsset(
+            this.output,
+            new webpack.sources.RawSource(json),
+          );
+
+          callback();
+        });
+      },
+    );
+  }
+}
+
 const getTypeScriptLoader = () => ({
   loader: "ts-loader",
   options: {
@@ -144,6 +252,13 @@ const config: webpack.Configuration = {
     overlay: "./src/pages/overlay/index.tsx",
   },
   plugins: [
+    new JsonOutputPlugin({
+      entry: "./src/data/json.ts",
+      output: "static/birds.json",
+      options: {
+        publicPath: env.REACT_APP_API_BASE_URL?.replace(/\/*$/, "/"),
+      },
+    }),
     new HtmlWebpackPlugin({
       template: "src/template.html",
       filename: "panel.html",
