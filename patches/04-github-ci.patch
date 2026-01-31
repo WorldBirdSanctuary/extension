@@ -8,10 +8,10 @@ index 84d606e..6f6305a 100644
 -REACT_APP_API_BASE_URL=
 +REACT_APP_API_BASE_URL=./
 diff --git a/.github/workflows/checks.yml b/.github/workflows/ci.yml
-similarity index 78%
+similarity index 77%
 rename from .github/workflows/checks.yml
 rename to .github/workflows/ci.yml
-index a59015a..bab6bea 100644
+index a59015a..198984a 100644
 --- a/.github/workflows/checks.yml
 +++ b/.github/workflows/ci.yml
 @@ -1,8 +1,9 @@
@@ -26,12 +26,13 @@ index a59015a..bab6bea 100644
  
  jobs:
    types:
-@@ -62,6 +63,19 @@ jobs:
+@@ -62,6 +63,20 @@ jobs:
    build:
      runs-on: ubuntu-latest
  
 +    permissions:
 +      contents: read
++      packages: read
 +      pages: write
 +      id-token: write
 +
@@ -46,7 +47,7 @@ index a59015a..bab6bea 100644
      steps:
        - name: Checkout
          uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-@@ -83,5 +97,17 @@ jobs:
+@@ -83,5 +98,17 @@ jobs:
        - name: Install dependencies
          run: pnpm install --frozen-lockfile
  
