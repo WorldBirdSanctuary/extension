@@ -8,23 +8,25 @@ index 84d606e..6f6305a 100644
 -REACT_APP_API_BASE_URL=
 +REACT_APP_API_BASE_URL=./
 diff --git a/.github/workflows/checks.yml b/.github/workflows/ci.yml
-similarity index 79%
+similarity index 78%
 rename from .github/workflows/checks.yml
 rename to .github/workflows/ci.yml
-index 724d7e6..db262f1 100644
+index a59015a..bab6bea 100644
 --- a/.github/workflows/checks.yml
 +++ b/.github/workflows/ci.yml
-@@ -1,8 +1,7 @@
+@@ -1,8 +1,9 @@
 -name: Checks
 +name: CI
  
  on:
    push:
 -  pull_request:
++    branches:
++      - main
  
  jobs:
    types:
-@@ -62,6 +61,19 @@ jobs:
+@@ -62,6 +63,19 @@ jobs:
    build:
      runs-on: ubuntu-latest
  
@@ -43,8 +45,8 @@ index 724d7e6..db262f1 100644
 +
      steps:
        - name: Checkout
-         uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
-@@ -83,5 +95,17 @@ jobs:
+         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+@@ -83,5 +97,17 @@ jobs:
        - name: Install dependencies
          run: pnpm install --frozen-lockfile
  
@@ -62,17 +64,64 @@ index 724d7e6..db262f1 100644
 +      - name: Deploy build
 +        id: deployment
 +        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5
+diff --git a/.github/workflows/update-pnpm.yml b/.github/workflows/update-pnpm.yml
+deleted file mode 100644
+index 1d32230..0000000
+--- a/.github/workflows/update-pnpm.yml
++++ /dev/null
+@@ -1,41 +0,0 @@
+-name: Update pnpm
+-
+-on:
+-  workflow_dispatch:
+-  schedule:
+-    # Run once per week on Monday at midnight, before Dependabot runs on Wednesday
+-    - cron: "0 0 * * 1"
+-
+-jobs:
+-  update:
+-    runs-on: ubuntu-latest
+-
+-    steps:
+-      - name: Checkout
+-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+-
+-      - name: Install pnpm
+-        uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4.2.0
+-        with:
+-          run_install: false
+-
+-      - name: Update pnpm
+-        id: update
+-        run: |
+-          echo "old=$(pnpm --version)" >> $GITHUB_OUTPUT
+-          pnpm self-update
+-          echo "new=$(pnpm --version)" >> $GITHUB_OUTPUT
+-          cat <<< $(jq '.engines.pnpm = "^" + (.packageManager | split("@")[1])' package.json) > package.json
+-
+-      - name: Create PR
+-        if: steps.update.outputs.old != steps.update.outputs.new
+-        uses: peter-evans/create-pull-request@c0f553fe549906ede9cf27b5156039d195d2ece0 # v8.1.0
+-        with:
+-          token: ${{ secrets.GH_PR_TOKEN }}
+-          title: Bump pnpm from ${{ steps.update.outputs.old }} to ${{ steps.update.outputs.new }}
+-          body: |
+-            Generated via `pnpm self-update`.
+-
+-            Check this workflow's logs at ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}.
+-          commit-message: Bump pnpm from ${{ steps.update.outputs.old }} to ${{ steps.update.outputs.new }}
+-          branch: automated/pnpm
 diff --git a/webpack.config.ts b/webpack.config.ts
-index f5f4518..bf338ac 100644
+index 62de5f1..86a3fa4 100644
 --- a/webpack.config.ts
 +++ b/webpack.config.ts
 @@ -1,4 +1,5 @@
  import { join } from "path";
 +import vm from "vm";
  
- import HtmlWebpackPlugin from "html-webpack-plugin";
+ import ReactRefreshWebpackPlugin from "@pmmmwh/react-refresh-webpack-plugin";
  import CopyWebpackPlugin from "copy-webpack-plugin";
-@@ -70,6 +71,113 @@ class UnusedAssetsPlugin {
+@@ -75,6 +76,113 @@ class UnusedAssetsPlugin {
    }
  }
  
@@ -186,7 +235,7 @@ index f5f4518..bf338ac 100644
  const getTypeScriptLoader = () => ({
    loader: "ts-loader",
    options: {
-@@ -139,6 +247,13 @@ const config: webpack.Configuration = {
+@@ -144,6 +252,13 @@ const config: webpack.Configuration = {
      overlay: "./src/pages/overlay/index.tsx",
    },
    plugins: [
