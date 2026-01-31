@@ -3,63 +3,21 @@ import {
   useCallback,
   useContext,
   useEffect,
-  useMemo,
   useState,
 } from "react";
 import { z } from "zod";
 
-import { getClassification } from "@alveusgg/data/build/ambassadors/classification";
-import allAmbassadors, {
-  ambassadorSchema,
-} from "@alveusgg/data/build/ambassadors/core";
-import { isActiveAmbassadorEntry } from "@alveusgg/data/build/ambassadors/filters";
+import { typeSafeObjectFromEntries } from "../utils/helpers";
+
 import {
-  ambassadorImageSchema,
-  getAmbassadorImages,
-} from "@alveusgg/data/build/ambassadors/images";
-import {
-  getSpecies,
-  speciesSchema,
-} from "@alveusgg/data/build/ambassadors/species";
-import enclosures from "@alveusgg/data/build/enclosures";
-import { getIUCNStatus } from "@alveusgg/data/build/iucn";
-
-import { getToday } from "../utils/dateManager";
-import {
-  typeSafeObjectEntries,
-  typeSafeObjectFromEntries,
-} from "../utils/helpers";
-
-import winstonImage from "../assets/winston.png";
-
-// These schema should match the type exposed by the API
-const apiAmbassadorSchema = ambassadorSchema.extend({
-  image: ambassadorImageSchema.extend({
-    src: z.string().url(),
-  }),
-  species: speciesSchema.extend({
-    key: z.string(),
-    iucn: speciesSchema.shape.iucn.and(
-      z.object({
-        title: z.string(),
-      }),
-    ),
-    class: z.object({
-      key: z.string(),
-      title: z.string(),
-    }),
-  }),
-  enclosure: z.object({
-    key: z.string(),
-    title: z.string(),
-  }),
-});
-
-type Ambassador = z.infer<typeof apiAmbassadorSchema>;
+  type Bird as Ambassador,
+  birdSchema as apiAmbassadorSchema,
+  birds as fallbackAmbassadors,
+} from "../data/birds";
 
 // Use transform here so we parse each ambassador individually
 const apiSchema = z.object({
-  v4: z
+  v1: z
     .record(
       z.string(),
       // Use nullable here as the fallback for when we fail to parse an ambassador
@@ -86,54 +44,20 @@ const apiSchema = z.object({
     }),
 });
 
-const apiBaseUrl = process.env.REACT_APP_API_BASE_URL?.replace(/\/+$/, "");
-if (!apiBaseUrl)
-  throw new Error("REACT_APP_API_BASE_URL environment variable is not set");
-
 const fetchAmbassadors = async (): Promise<Record<string, Ambassador>> => {
-  const response = await fetch(`${apiBaseUrl}/api/stream/ambassadors`);
+  const apiBaseUrl = process.env.REACT_APP_API_BASE_URL?.replace(/\/+$/, "");
+  if (!apiBaseUrl)
+    throw new Error("REACT_APP_API_BASE_URL environment variable is not set");
+
+  const response = await fetch(`${apiBaseUrl}/static/birds.json`);
   if (!response.ok)
     throw new Error(
       `Failed to fetch ambassadors: ${response.status} ${response.statusText} ${await response.text()}`,
     );
 
   const data = await response.json();
-  return apiSchema.parse(data).v4;
+  return apiSchema.parse(data).v1;
 };
-
-const fallbackAmbassadors: Record<string, Ambassador> =
-  typeSafeObjectFromEntries(
-    typeSafeObjectEntries(allAmbassadors)
-      .filter(isActiveAmbassadorEntry)
-      .map<[string, Ambassador]>(([key, val]) => {
-        const image = getAmbassadorImages(key)[0];
-        const species = getSpecies(val.species);
-
-        return [
-          key,
-          {
-            ...val,
-            image,
-            species: {
-              ...species,
-              key: val.species,
-              iucn: {
-                ...species.iucn,
-                title: getIUCNStatus(species.iucn.status),
-              },
-              class: {
-                key: species.class,
-                title: getClassification(species.class),
-              },
-            },
-            enclosure: {
-              key: val.enclosure,
-              title: enclosures[val.enclosure].name,
-            },
-          },
-        ];
-      }),
-  );
 
 // Use a context to fetch the ambassadors from the API
 const Context = createContext<{
@@ -191,79 +115,9 @@ export const AmbassadorsProvider = ({
   );
 };
 
-const winston = {
-  name: "Winston",
-  alternate: [],
-  commands: ["winston"],
-  species: {
-    key: "polarBear",
-    name: "Polar Bear",
-    scientificName: "Twitchus memeticus",
-    iucn: {
-      id: null,
-      assessment: null,
-      title: getIUCNStatus("NE"),
-      status: "NE",
-    },
-    native:
-      "Twitch chat (including the Animals, Aquariums, & Zoos category), miscellaneous emote services",
-    lifespan: {
-      wild: "Unknown",
-      captivity: "Unknown",
-    },
-    birth: "live",
-    class: {
-      key: "mammalia",
-      title: getClassification("mammalia"),
-    },
-  },
-  sex: "Male",
-  birth: "2020-04-01",
-  arrival: "2022-12-01",
-  retired: null,
-  enclosure: {
-    key: "ice",
-    title: "Ice Pool",
-  },
-  story:
-    "Winston was rescued by the Ontario Zoo in Canada after it was noticed that he was watching streams too often and not touching grass. Originally on loan to Alveus for two years, he is now a permanent resident of Texas.",
-  mission:
-    "He is an ambassador for stream-life balance and encouraging all chatters to step away from their devices more often.",
-  clips: [],
-  homepage: null,
-  plush: null,
-  image: {
-    src: winstonImage,
-    alt: "Winston the polar bear",
-    position: "50% 25%",
-  },
-} as const satisfies Ambassador;
-
-const isWinstonDate = (date: string) => date === "04-01";
-
 export const useAmbassadors = (): Record<string, Ambassador> | null => {
   const context = useContext(Context);
-
-  // Setup a timer to store the current month and day
-  const [date, setDate] = useState<string>("");
-  useEffect(() => {
-    const updateDate = () => setDate(getToday().toFormat("MM-dd"));
-    updateDate();
-    const interval = setInterval(updateDate, 60 * 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  // Return the ambassadors, with Winston added to the start if it's April 1st
-  return useMemo(
-    () =>
-      context?.ambassadors
-        ? {
-            ...context?.ambassadors,
-            ...(isWinstonDate(date) ? { winston } : {}),
-          }
-        : null,
-    [context?.ambassadors, date],
-  );
+  return context?.ambassadors ?? null;
 };
 
 export const useAmbassador = (key: string) => {
