@@ -26,7 +26,6 @@ import puck from "../assets/birds/puck.jpg";
 import ringo from "../assets/birds/ringo.jpg";
 import sayyida from "../assets/birds/sayyida.jpg";
 import scoop from "../assets/birds/scoop.jpg";
-import shakespeare from "../assets/birds/shakespeare.jpg";
 import sprinkles from "../assets/birds/sprinkles.jpg";
 import sterling from "../assets/birds/sterling.jpg";
 import tammy from "../assets/birds/tammy.jpg";
@@ -382,22 +381,6 @@ export const birds = {
     reason: "Wing amputation",
     story:
       "Scoop was found in a pond in West Alton, Missouri, with an old wing injury that couldn't be repaired. To keep him comfortable, we had to amputate part of his wing. Unfortunately, that meant he had to stay here with us but luckily, Scoop quickly found a new purpose as an ambassador for his species! From the very start, Scoop's confidence and charm stood out. He mastered his training , learning to stand on stations, voluntarily weigh, go into a crate, and touch his beak to a target stick at a rapid pace. His big personality made him a natural educator, and he loved showing off his impressive beak and signature pelican waddle during programs and even on local news stations. Now retired on Avian Avenue, Scoop enjoys the good life—swimming in his pond, napping in the sun, and relaxing on top of his waterfall. He still insists on being the boss, often \"supervising\" staff as they work. Scoop remains a true example of resilience, confidence, and character.",
-  },
-  shakespeare: {
-    name: "Shakespeare",
-    commands: ["shakespeare"],
-    image: {
-      src: shakespeare,
-      alt: "Shakespeare the Barred Owl",
-      position: "60% 30%",
-    },
-    species: species.strixVaria,
-    sex: "Male",
-    birth: "2004",
-    arrival: "2004-04-22",
-    reason: "Human imprint",
-    story:
-      "Shakespeare came to our Kathryn G. Favre Foundation Raptor Hospital as a fluffy little owlet. It didn't take long for our staff to realize that he was a human imprint—meaning he had been raised by people before arriving here. When baby birds grow up without their parents, foster parents or species-specific puppets, they don't learn how to be their true bird selves. For Shakespeare, that meant he never learned how to be an owl. Instead, he thinks he's one of us! Because he wouldn't be able to survive in the wild, Shakespeare joined our ambassador team. For years, he visited local schools and helped students learn all about Barred Owls. He was a natural teacher—at first. Eventually, though, Shakespeare decided he preferred visitors coming to him rather than traveling to them. So he officially retired from our traveling programs and moved into an aviary on Avian Avenue. Now, he enjoys a quieter life where his favorite people come by to say hello—and, of course, cater to his every whim. During hooting season, Shakespeare loves to sing for his favorite staff members. As a very vocal owl, he sometimes even starts up conversations with wild owls nearby—you might hear them calling back and forth in the evenings!",
   },
   sprinkles: {
     name: "Sprinkles",
