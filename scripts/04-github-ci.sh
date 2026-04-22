@@ -10,3 +10,6 @@ fi
 
 # Update the CI workflow to deploy an extension preview.
 git apply --3way "$PATCH_DIR/patches/04-github-ci.patch"
+
+# Remove the pnpm update workflow
+rm .github/workflows/update-pnpm.yml
