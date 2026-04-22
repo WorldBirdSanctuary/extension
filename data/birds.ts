@@ -7,6 +7,7 @@ import { species, speciesSchema } from "./species";
 
 import ace from "../assets/birds/ace.jpg";
 import alejandro from "../assets/birds/alejandro.jpg";
+import archimedes from "../assets/birds/archimedes.jpg";
 import bruno from "../assets/birds/bruno.jpg";
 import buzz from "../assets/birds/buzz.jpg";
 import caesar from "../assets/birds/caesar.jpg";
@@ -79,6 +80,21 @@ export const birds = {
     reason: "Conservation and education ambassador",
     story:
       'Alejandro was hatched at the San Diego Zoo as part of a conservation effort to help save his species. Though he has been paired with female Harpy Eagles in the past, he has been unsuccessful in producing offspring as he prefers to be around people over other eagles. Alejandro now lives with us at the World Bird Sanctuary where he thrives as an ambassador educating the public about Harpy Eagles and raptor conservation. With his friendly personality, he quickly took to training and made his public debut just months after arriving. He charms audiences all around the Midwest with his charismatic "squeak honks" and head bobs as guests meet this impressively powerful raptor up close! Alejandro lives behind the scenes in a large aviary where he gets all of the best sticks to build his nests. Due to the trust Alejandro has built with his trainers, we are hoping in the next few years for his genetics to still be able to directly contribute to Harpy Eagle conservation by collecting samples from him for artificial insemination.',
+  },
+  archimedes: {
+    name: "Archimedes",
+    commands: ["archimedes"],
+    image: {
+      src: archimedes,
+      alt: "Archimedes the Great Horned Owl",
+    },
+    species: species.buboVirginianus,
+    sex: "Male",
+    birth: "2023",
+    arrival: "2023-09-18",
+    reason: "Right wing injury",
+    story:
+      "Archimedes arrived at our hospital in September of 2023 after being found unable to fly at a construction site. His right wing was held at a droop and had limited function, even though no fractures or other damage could be identified. Rehabilitative care, including cold laser and physical therapy, considerably improved Archimedes' use of his wing. He eventually regained most of his flight capabilities but still lacked the lift and endurance needed to survive on his own. Archimedes was still recovering when we received our first babies of 2024, and he ended up on foster duty. As a 2023 hatch, he had never had babies of his own but still showed a clear interest in the juveniles, going over to perch near them and engaging in beak fencing with the older babies. His dislike of humans meant that his foster children grew up to develop an appropriately avoidant response to people and made Archimedes an ideal candidate for continuing in a parental role. As he gains more experience, Archimedes has shown increasing interest in the juveniles. In just two years of fostering, Archimedes has already raised over 20 baby Great Horned Owls!",
   },
   bruno: {
     name: "Bruno",
