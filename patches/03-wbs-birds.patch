@@ -24,7 +24,7 @@ index 34ac0ca..fdf1b70 100644
 +REACT_APP_API_BASE_URL=https://worldbirdsanctuary.github.io/extension
  REACT_APP_TIMEZONE=America/Chicago
 diff --git a/src/components/AmbassadorCard.tsx b/src/components/AmbassadorCard.tsx
-index cf7d6be..f7953aa 100644
+index ac8fd06..9d1e781 100644
 --- a/src/components/AmbassadorCard.tsx
 +++ b/src/components/AmbassadorCard.tsx
 @@ -3,9 +3,10 @@ import { type Ref, useCallback, useEffect, useRef } from "react";
@@ -50,8 +50,8 @@ index cf7d6be..f7953aa 100644
  export interface AmbassadorCardProps {
    ambassador: string;
    onClose?: () => void;
-@@ -53,6 +50,9 @@ export default function AmbassadorCard(props: AmbassadorCardProps) {
-   const birthday = ambassador?.birth && isBirthday(ambassador.birth);
+@@ -56,6 +53,9 @@ export default function AmbassadorCard(props: AmbassadorCardProps) {
+     forceBirthdayEffects || (ambassador?.birth && isBirthday(ambassador.birth));
    const age = ambassador?.birth ? calculateAge(ambassador.birth) : "Unknown";
    const birth = ambassador?.birth ? formatDate(ambassador.birth) : "Unknown";
 +  const arrival = ambassador?.arrival
@@ -60,7 +60,7 @@ index cf7d6be..f7953aa 100644
  
    const internalRef = useRef<HTMLDivElement>(null);
    const callbackRef = useCallback(
-@@ -191,52 +191,30 @@ export default function AmbassadorCard(props: AmbassadorCardProps) {
+@@ -194,52 +194,30 @@ export default function AmbassadorCard(props: AmbassadorCardProps) {
  
            <div>
              <h3 className={headingClass}>Species</h3>
@@ -127,7 +127,7 @@ index cf7d6be..f7953aa 100644
            </div>
  
            <div>
-@@ -264,94 +242,66 @@ export default function AmbassadorCard(props: AmbassadorCardProps) {
+@@ -267,94 +245,66 @@ export default function AmbassadorCard(props: AmbassadorCardProps) {
                    className="text-nowrap text-wbs-blue-200 transition-colors hover:text-highlight focus:text-highlight"
                  >
                    <span className="underline">
@@ -258,7 +258,7 @@ index cf7d6be..f7953aa 100644
          </div>
        </div>
 diff --git a/src/hooks/useAmbassadors.tsx b/src/hooks/useAmbassadors.tsx
-index b99cfa5..543e1bd 100644
+index 21aea30..543e1bd 100644
 --- a/src/hooks/useAmbassadors.tsx
 +++ b/src/hooks/useAmbassadors.tsx
 @@ -3,63 +3,21 @@ import {
@@ -464,8 +464,8 @@ index b99cfa5..543e1bd 100644
 -    () =>
 -      context?.ambassadors
 -        ? {
--            ...context?.ambassadors,
 -            ...(isWinstonDate(date) ? { winston } : {}),
+-            ...context?.ambassadors,
 -          }
 -        : null,
 -    [context?.ambassadors, date],
@@ -475,7 +475,7 @@ index b99cfa5..543e1bd 100644
  
  export const useAmbassador = (key: string) => {
 diff --git a/webpack.config.ts b/webpack.config.ts
-index d474577..62de5f1 100644
+index df9df6d..b68aa13 100644
 --- a/webpack.config.ts
 +++ b/webpack.config.ts
 @@ -1,4 +1,4 @@
@@ -484,53 +484,42 @@ index d474577..62de5f1 100644
  
  import ReactRefreshWebpackPlugin from "@pmmmwh/react-refresh-webpack-plugin";
  import CopyWebpackPlugin from "copy-webpack-plugin";
-@@ -234,34 +234,14 @@ const config: webpack.Configuration = {
-       },
-       // Load images
-       {
--        test: /\.(png|jpe?g|gif|svg)$/i,
--        exclude: /node_modules/,
--        type: "asset",
--      },
--      // Load ambassador images in @alveusgg packages
--      {
--        test: /\.(png|jpe?g)$/,
-+        test: /\.(png|jpe?g)$/i,
-         include: [
--          new RegExp(
--            join(
--              "node_modules",
--              "@alveusgg",
--              "data",
--              "build",
--              "assets",
--              "ambassadors",
--            ).replace(/\\/g, "\\\\"),
--          ),
--          new RegExp(join("src", "assets", "winston").replace(/\\/g, "\\\\")),
-+          new RegExp(join("src", "assets", "birds").replace(/\\/g, "\\\\")),
-         ],
-         type: "asset",
-         generator: {
--          filename: (pathData) => {
--            if (!pathData.filename) return "";
--            const dir = basename(dirname(pathData.filename));
--            return `static/media/ambassadors/${dir}/[name].[contenthash][ext]`;
--          },
--        } as webpack.WebpackOptionsNormalized["module"]["generator"]["asset"],
-+          filename: "static/media/birds/[name].[contenthash][ext]",
-+        },
-         use: [
-           {
-             loader: "webpack-image-resize-loader",
-@@ -271,6 +251,10 @@ const config: webpack.Configuration = {
-           },
-         ],
-       },
-+      {
-+        test: /\.(png|jpe?g|gif|svg)$/i,
-+        type: "asset",
-+      },
-     ],
-   },
-   resolve: {
+@@ -239,33 +239,17 @@ const config = (env: Env): webpack.Configuration => {
+         // Load images
+         {
+           test: /\.(png|jpe?g|gif|svg)$/i,
+-          exclude: /node_modules/,
++          exclude: new RegExp(join("src", "assets", "birds").replace(/\\/g, "\\\\")),
+           type: "asset",
+         },
+-        // Load ambassador images in @alveusgg packages
++        // Load ambassador images
+         {
+           test: /\.(png|jpe?g)$/,
+-          include: [
+-            new RegExp(
+-              join(
+-                "node_modules",
+-                "@alveusgg",
+-                "data",
+-                "build",
+-                "assets",
+-                "ambassadors",
+-              ).replace(/\\/g, "\\\\"),
+-            ),
+-            new RegExp(join("src", "assets", "winston").replace(/\\/g, "\\\\")),
+-          ],
++          include: new RegExp(join("src", "assets", "birds").replace(/\\/g, "\\\\")),
+           type: "asset",
+           generator: {
+-            filename: (pathData) => {
+-              if (!pathData.filename) return "";
+-              const dir = basename(dirname(pathData.filename));
+-              return `static/media/ambassadors/${dir}/[name].[contenthash][ext]`;
+-            },
+-          } as webpack.WebpackOptionsNormalized["module"]["generator"]["asset"],
++            filename: "static/media/birds/[name].[contenthash][ext]",
++          },
+           use: [
+             {
+               loader: "webpack-image-resize-loader",
