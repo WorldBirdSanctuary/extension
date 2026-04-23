@@ -16,4 +16,32 @@
 
 @theme {
   --default-transition-duration: 300ms;
+
+  /* https://tints.dev/palette/v1:d2JzLWJsdWV8MjMzOTVEfDcwMHxwfDB8MHwwfDEwMHxt */
+  --color-wbs-blue-50: oklch(from #edf1fa l c h);
+  --color-wbs-blue-100: oklch(from #d7e0f5 l c h);
+  --color-wbs-blue-200: oklch(from #afc1eb l c h);
+  --color-wbs-blue-300: oklch(from #84a3e2 l c h);
+  --color-wbs-blue-400: oklch(from #5a89d6 l c h);
+  --color-wbs-blue-500: oklch(from #476dac l c h);
+  --color-wbs-blue-600: oklch(from #355283 l c h);
+  --color-wbs-blue-700: oklch(from #23395d l c h);
+  --color-wbs-blue-800: oklch(from #172843 l c h);
+  --color-wbs-blue-900: oklch(from #0c182b l c h);
+  --color-wbs-blue-950: oklch(from #060e1c l c h);
+  --color-wbs-blue: var(--color-wbs-blue-700);
+
+  /* https://tints.dev/palette/v1:d2JzLWdyZXl8RDNEQURBfDcwMHxwfDB8MHwwfDEwMHxt */
+  --color-wbs-grey-50: oklch(from #fbfcfc l c h);
+  --color-wbs-grey-100: oklch(from #f8fafa l c h);
+  --color-wbs-grey-200: oklch(from #f1f4f4 l c h);
+  --color-wbs-grey-300: oklch(from #eaefef l c h);
+  --color-wbs-grey-400: oklch(from #e3e9e9 l c h);
+  --color-wbs-grey-500: oklch(from #dde4e4 l c h);
+  --color-wbs-grey-600: oklch(from #d7dede l c h);
+  --color-wbs-grey-700: oklch(from #d3dada l c h);
+  --color-wbs-grey-800: oklch(from #888c8c l c h);
+  --color-wbs-grey-900: oklch(from #424545 l c h);
+  --color-wbs-grey-950: oklch(from #222424 l c h);
+  --color-wbs-grey: var(--color-wbs-grey-700);
 }
