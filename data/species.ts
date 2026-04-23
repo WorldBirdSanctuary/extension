@@ -51,7 +51,7 @@ export const species = {
     name: "Great Horned Owl",
     scientificName: "Bubo virginianus",
     description:
-      "Great Horned Owls are mottled gray-brown, with reddish brown faces and a neat white patch on the throat that can be seen when they hoot. They have prominent feather tufts on their heads.Great Horned Owls are mottled gray-brown, with reddish brown faces and a neat white patch on the throat that can be seen when they hoot. They have prominent feather tufts on their heads.",
+      "Great Horned Owls are mottled gray-brown, with reddish brown faces and a neat white patch on the throat that can be seen when they hoot. They have prominent feather tufts on their heads.",
     range: "Throughout North, Central, and parts of South America",
     habitat:
       "Wide variety of wooded habitats, swamps, deserts, rocky areas, farmlands, and urban areas.",
