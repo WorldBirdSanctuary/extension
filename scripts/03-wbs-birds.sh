@@ -16,3 +16,6 @@ mkdir -p src/data/
 cp -r "$PATCH_DIR/data/"* src/data/
 mkdir -p src/assets/birds/
 cp -r "$PATCH_DIR/assets/birds/"* src/assets/birds/
+
+# Remove the pnpm update workflow
+rm src/assets/winston.png
