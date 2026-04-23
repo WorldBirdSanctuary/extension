@@ -2,7 +2,7 @@
 
 @layer base {
   body {
-    @apply h-screen w-screen overflow-hidden bg-alveus-tan font-sans text-alveus-tan;
+    @apply h-screen w-screen overflow-hidden bg-wbs-grey font-sans text-wbs-grey;
   }
 
   #root {
