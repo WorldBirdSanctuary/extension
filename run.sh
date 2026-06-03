@@ -16,6 +16,9 @@ fi
 git fetch upstream
 git reset --hard upstream/main
 
+# Install latest dependencies.
+pnpm install --frozen-lockfile
+
 # Get the directory this script is located in.
 PATCH_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
