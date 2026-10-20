@@ -9,7 +9,7 @@ fi
 
 # Add the upstream remote if it doesn't already exist.
 if ! git remote | grep -q upstream; then
-    git remote add upstream git@github.com:alveusgg/extension.git
+    git remote add upstream https://github.com/alveusgg/extension.git
 fi
 
 # Reset the repository to match the upstream main branch.

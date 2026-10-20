@@ -12,5 +12,4 @@ fi
 git apply --3way "$PATCH_DIR/patches/02-wbs-theme.patch"
 
 # Replace all occurrences of the Alveus theme colors with the WBS theme colors.
-sed -i '' 's/alveus-green/wbs-blue/g' $(find src -name '*.tsx' -o -name '*.ts' -o -name '*.css')
-sed -i '' 's/alveus-tan/wbs-grey/g' $(find src -name '*.tsx' -o -name '*.ts' -o -name '*.css')
+perl -pi -e 's/alveus-green/wbs-blue/g; s/alveus-tan/wbs-grey/g' $(find src -name '*.tsx' -o -name '*.ts' -o -name '*.css')
