@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - patches
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -72,6 +73,6 @@ jobs:
           fi
 
       - name: Push to main
-        if: steps.diff.outputs.changed == 'true'
+        if: github.event_name == 'workflow_dispatch' || steps.diff.outputs.changed == 'true'
         working-directory: main
         run: git push --force-with-lease=main:origin/main origin HEAD:main
