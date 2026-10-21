@@ -47,9 +47,13 @@ jobs:
 
       - name: Configure Git
         working-directory: main
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BOT_LOGIN: github-actions[bot]
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898242+github-actions[bot]@users.noreply.github.com"
+          BOT_ID=$(gh api "users/$BOT_LOGIN" --jq .id)
+          git config user.name "$BOT_LOGIN"
+          git config user.email "$BOT_ID+$BOT_LOGIN@users.noreply.github.com"
 
       - name: Apply patches
         working-directory: main
