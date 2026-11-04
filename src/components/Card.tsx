@@ -14,7 +14,7 @@ export default function Card(props: CardProps) {
   return (
     <div
       className={classes(
-        "flex max-h-full w-[32rem] max-w-full scrollbar-thin scrollbar-thumb-alveus-green scrollbar-track-alveus-green-900 flex-col items-center justify-between overflow-y-auto rounded-3xl bg-alveus-green p-5 shadow-sm",
+        "flex max-h-full w-[32rem] max-w-full scrollbar-thin scrollbar-thumb-wbs-blue scrollbar-track-wbs-blue-900 flex-col items-center justify-between overflow-y-auto rounded-3xl bg-wbs-blue p-5 shadow-sm",
         !/\b(static|sticky|fixed|absolute)\b/.test(className || "") &&
           "relative",
         className,

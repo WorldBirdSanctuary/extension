@@ -22,7 +22,7 @@ export default function AmbassadorButton(props: AmbassadorButtonProps) {
   return (
     <button
       className={classes(
-        "group/button relative flex shrink-0 flex-col items-center justify-start rounded-lg bg-alveus-green text-center shadow-lg transition-[filter] hover:brightness-125",
+        "group/button relative flex shrink-0 flex-col items-center justify-start rounded-lg bg-wbs-blue text-center shadow-lg transition-[filter] hover:brightness-125",
         className,
       )}
       id={ambassadorKey}
@@ -39,7 +39,7 @@ export default function AmbassadorButton(props: AmbassadorButtonProps) {
 
       <div className="my-auto px-1 pt-2 pb-2">
         <h2 className="text-sm text-balance">{ambassador.name}</h2>
-        <h3 className="text-xs text-balance text-alveus-green-200">
+        <h3 className="text-xs text-balance text-wbs-blue-200">
           {ambassador.species.name}
         </h3>
       </div>
