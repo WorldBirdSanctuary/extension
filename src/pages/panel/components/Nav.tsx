@@ -4,7 +4,7 @@ import Welcome from "../../../components/Welcome";
 
 import IconInfo from "../../../components/icons/IconInfo";
 
-import alveus from "../../../assets/alveus.png";
+import wbs from "../../../assets/wbs.png";
 
 import Overlay from "./Overlay";
 
@@ -13,8 +13,10 @@ export default function Nav() {
 
   return (
     <nav className="fixed inset-x-0 top-0 z-10 flex h-12 w-full items-center justify-start gap-3 bg-alveus-green/85 px-4 shadow-lg backdrop-blur-sm sm:justify-center">
-      <img className="h-8 w-auto" src={alveus} alt="Alveus Logo" />
-      <h1 className="text-lg">Alveus Ambassadors</h1>
+      <img className="h-8 w-auto" src={wbs} alt="WBS Logo" />
+      <h1 className="text-lg leading-none text-balance">
+        World Bird Sanctuary Birds
+      </h1>
       <button
         className="group -mr-2 ml-auto rounded-full p-2 sm:absolute sm:right-4 sm:ml-0"
         onClick={() => setShowWelcome(true)}
