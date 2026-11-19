@@ -23,12 +23,12 @@ export default function Toggle(props: ToggleProps) {
       <span className="relative">
         <input
           type="checkbox"
-          className="peer block h-6 w-6 cursor-pointer appearance-none rounded-lg border-none bg-alveus-tan-100 outline-highlight transition-[outline] group-focus-within:outline-3 group-hover:outline-3 checked:bg-alveus-tan-200"
+          className="peer block h-6 w-6 cursor-pointer appearance-none rounded-lg border-none bg-wbs-grey-100 outline-highlight transition-[outline] group-focus-within:outline-3 group-hover:outline-3 checked:bg-wbs-grey-200"
           onChange={onChangeNative}
           checked={value}
         />
         <IconCheck
-          className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-alveus-green opacity-0 transition-opacity peer-checked:opacity-100"
+          className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-wbs-blue opacity-0 transition-opacity peer-checked:opacity-100"
           size={18}
         />
       </span>
