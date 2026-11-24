@@ -1,5 +1,5 @@
 diff --git a/README.md b/README.md
-index 455f4e0..cfa6772 100644
+index de7a341..c787f19 100644
 --- a/README.md
 +++ b/README.md
 @@ -1,20 +1,10 @@
@@ -27,7 +27,7 @@ index 455f4e0..cfa6772 100644
  
  ## Local Set Up
  
-@@ -79,31 +69,23 @@ The panel is available at [localhost:8080/panel.html](https://localhost:8080/pan
+@@ -80,31 +70,23 @@ The panel is available at [localhost:8080/panel.html](https://localhost:8080/pan
  
  ## Chatbot Commands
  
@@ -66,7 +66,7 @@ index 455f4e0..cfa6772 100644
  When using the extension, it will create a local storage entry in your browser to store the last section of the overlay that you accessed, and any preferences you set (such as disabling the mod-triggered popups). This is to allow the extension to remember your preferences between sessions. The data stored in local storage is not shared with anyone and does not include any personal information.
  
 diff --git a/RELEASE.md b/RELEASE.md
-index ed57cac..bc676aa 100644
+index 8af6ddb..bc676aa 100644
 --- a/RELEASE.md
 +++ b/RELEASE.md
 @@ -8,7 +8,7 @@ All new versions start in local test where the base URI is `https://localhost:80
@@ -97,7 +97,7 @@ index ed57cac..bc676aa 100644
  
  Changelog:
  
-@@ -42,31 +38,29 @@ Changelog:
+@@ -42,30 +38,29 @@ Changelog:
  
  Source code diff:
  
@@ -109,8 +109,7 @@ index ed57cac..bc676aa 100644
 -    All links are related to Alveus Sanctuary, and can be found in the ambassador cards as well as the overlay welcome card.
 +    All links are related to World Bird Sanctuary, and can be found in the bird cards as well as the overlay welcome card.
  
--    - Alveus Sanctuary website (homepage + ambassador pages)
--    - Alveus Amazon Wishlist
+-    - Alveus Sanctuary website (homepage + ambassador pages + wishlist)
 -    - Alveus Instagram
 -    - Alveus TikTok
 -    - Alveus X/Twitter
@@ -139,7 +138,7 @@ index ed57cac..bc676aa 100644
  
  </details>
 diff --git a/package.json b/package.json
-index 7a69c0a..6a17cbd 100644
+index 6da1ca9..9ce0f17 100644
 --- a/package.json
 +++ b/package.json
 @@ -1,15 +1,15 @@
@@ -159,8 +158,8 @@ index 7a69c0a..6a17cbd 100644
 -    "url": "https://github.com/alveusgg/extension/issues"
 +    "url": "https://github.com/worldbirdsanctuary/extension/issues"
    },
-   "engines": {
-     "node": ">=24.11.0",
+   "packageManager": "pnpm@12.21.0",
+   "devEngines": {
 diff --git a/public/index.html b/public/index.html
 index 4618004..8faf64b 100644
 --- a/public/index.html
@@ -186,7 +185,7 @@ index a17cc1a..ca4d34e 100644
    "display": "standalone",
    "theme_color": "#000000",
 diff --git a/src/components/Welcome.tsx b/src/components/Welcome.tsx
-index 521e50e..75925dc 100644
+index c930ded..b88a3bf 100644
 --- a/src/components/Welcome.tsx
 +++ b/src/components/Welcome.tsx
 @@ -1,15 +1,9 @@
@@ -194,8 +193,8 @@ index 521e50e..75925dc 100644
 -
 -import useChannel from "../hooks/useChannel";
 -
- import IconAmazon from "./icons/IconAmazon";
  import IconFacebook from "./icons/IconFacebook";
+ import IconGift from "./icons/IconGift";
  import IconGitHub from "./icons/IconGitHub";
  import IconGlobe from "./icons/IconGlobe";
  import IconInstagram from "./icons/IconInstagram";
@@ -245,7 +244,7 @@ index 521e50e..75925dc 100644
 +            href="https://www.amazon.com/hz/wishlist/ls/2X3ZNQ38V41RE"
              rel="noreferrer"
              target="_blank"
-             title="Amazon Wishlist"
+             title="Sanctuary Wishlist"
 @@ -61,7 +49,7 @@ export default function Welcome(props: WelcomeProps) {
          </li>
          <li className={socialClass}>
@@ -309,7 +308,7 @@ index 521e50e..75925dc 100644
          target="_blank"
        >
 diff --git a/src/pages/overlay/components/overlay/Ambassadors.tsx b/src/pages/overlay/components/overlay/Ambassadors.tsx
-index f77180f..3dd3ca1 100644
+index 3d60f81..aa12d7b 100644
 --- a/src/pages/overlay/components/overlay/Ambassadors.tsx
 +++ b/src/pages/overlay/components/overlay/Ambassadors.tsx
 @@ -30,28 +30,24 @@ const arrowPathClass =
