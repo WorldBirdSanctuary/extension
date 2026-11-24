@@ -8,10 +8,10 @@ index 84d606e..6f6305a 100644
 -REACT_APP_API_BASE_URL=
 +REACT_APP_API_BASE_URL=./
 diff --git a/.github/workflows/checks.yml b/.github/workflows/ci.yml
-similarity index 80%
+similarity index 71%
 rename from .github/workflows/checks.yml
 rename to .github/workflows/ci.yml
-index 2c8e2d6..34ddf1e 100644
+index c711777..d489713 100644
 --- a/.github/workflows/checks.yml
 +++ b/.github/workflows/ci.yml
 @@ -1,8 +1,9 @@
@@ -46,10 +46,10 @@ index 2c8e2d6..34ddf1e 100644
 +
      steps:
        - name: Checkout
-         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-@@ -87,9 +102,21 @@ jobs:
+         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+@@ -87,9 +102,32 @@ jobs:
        - name: Install dependencies
-         run: pnpm install --frozen-lockfile
+         run: pnpm ci
  
 +      - name: Prepare environment
 +        run: cp .env.sample .env
@@ -58,13 +58,24 @@ index 2c8e2d6..34ddf1e 100644
          run: pnpm build
  
 +      - name: Upload build
-+        uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4.0.0
++        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
 +        with:
 +          path: build
 +
++      # FIXME: https://github.com/actions/deploy-pages/pull/455
++      - name: Await build
++        timeout-minutes: 3
++        env:
++          GH_TOKEN: ${{ github.token }}
++        run: |
++          until [ "$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/artifacts?name=github-pages" --jq '.total_count')" -gt 0 ]; do
++            echo "Waiting for Pages artifact..."
++            sleep 2
++          done
++
 +      - name: Deploy build
 +        id: deployment
-+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5
++        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
 +
    zizmor:
      runs-on: ubuntu-latest
