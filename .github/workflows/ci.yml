@@ -1,8 +1,9 @@
-name: Checks
+name: CI
 
 on:
   push:
-  pull_request:
+    branches:
+      - main
 
 permissions:
   contents: read
@@ -66,6 +67,20 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+      packages: read
+      pages: write
+      id-token: write
+
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -87,8 +102,31 @@ jobs:
       - name: Install dependencies
         run: pnpm ci
 
+      - name: Prepare environment
+        run: cp .env.sample .env
+
       - name: Build extension
         run: pnpm build
+
+      - name: Upload build
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: build
+
+      # FIXME: https://github.com/actions/deploy-pages/pull/455
+      - name: Await build
+        timeout-minutes: 3
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          until [ "$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/artifacts?name=github-pages" --jq '.total_count')" -gt 0 ]; do
+            echo "Waiting for Pages artifact..."
+            sleep 2
+          done
+
+      - name: Deploy build
+        id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
 
   zizmor:
     runs-on: ubuntu-latest
