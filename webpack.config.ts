@@ -1,4 +1,4 @@
-import { basename, dirname, join } from "path";
+import { join } from "path";
 
 import ReactRefreshWebpackPlugin from "@pmmmwh/react-refresh-webpack-plugin";
 import CopyWebpackPlugin from "copy-webpack-plugin";
@@ -239,33 +239,21 @@ const config = (env: Env): webpack.Configuration => {
         // Load images
         {
           test: /\.(png|jpe?g|gif|svg)$/i,
-          exclude: /node_modules/,
+          exclude: new RegExp(
+            join("src", "assets", "birds").replace(/\\/g, "\\\\"),
+          ),
           type: "asset",
         },
-        // Load ambassador images in @alveusgg packages
+        // Load ambassador images
         {
           test: /\.(png|jpe?g)$/,
-          include: [
-            new RegExp(
-              join(
-                "node_modules",
-                "@alveusgg",
-                "data",
-                "build",
-                "assets",
-                "ambassadors",
-              ).replace(/\\/g, "\\\\"),
-            ),
-            new RegExp(join("src", "assets", "winston").replace(/\\/g, "\\\\")),
-          ],
+          include: new RegExp(
+            join("src", "assets", "birds").replace(/\\/g, "\\\\"),
+          ),
           type: "asset",
           generator: {
-            filename: (pathData) => {
-              if (!pathData.filename) return "";
-              const dir = basename(dirname(pathData.filename));
-              return `static/media/ambassadors/${dir}/[name].[contenthash][ext]`;
-            },
-          } as webpack.WebpackOptionsNormalized["module"]["generator"]["asset"],
+            filename: "static/media/birds/[name].[contenthash][ext]",
+          },
           use: [
             {
               loader: "webpack-image-resize-loader",
